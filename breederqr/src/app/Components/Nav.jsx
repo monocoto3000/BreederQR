@@ -13,8 +13,25 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import Enlaces from '../Atoms/Enlaces';
 
-const pages = ['Principal', 'Ejemplares', 'Blog'];
+const pages = [
+{
+ 
+  nombrePage: "Dashboard",
+  href:"../"
+},
+{
+  
+  nombrePage: "Blog",
+  href:"../form"
+},
+{
+  
+  nombrePage: "Contactanos",
+  href:"../form"
+}
+];
 const settings = ['Perfil', 'Cerrar sesión'];
 
 function Nav() {
@@ -59,7 +76,8 @@ function Nav() {
             LOGO
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}> 
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -89,12 +107,13 @@ function Nav() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem  onClick={handleCloseNavMenu} >
+                  <Typography textAlign="center">{page.nombrePage}</Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
+
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
@@ -114,15 +133,10 @@ function Nav() {
           >
             LOGO
           </Typography>
+
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
+              <Enlaces {...page}/>
             ))}
           </Box>
 
@@ -149,8 +163,10 @@ function Nav() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem 
+                // key={setting} 
+                onClick={handleCloseUserMenu} >
+                  <Typography textAlign="center" >{setting}</Typography>
                 </MenuItem>
               ))}
             </Menu>

@@ -1,3 +1,4 @@
+import Nav from './Components/Nav'
 import styles from './page.module.css'
 import Ejemplares from './pages/Ejemplares'
 export default function Home() {
