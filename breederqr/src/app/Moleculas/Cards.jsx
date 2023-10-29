@@ -6,9 +6,9 @@ import '@fontsource/roboto/700.css';
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import { Card, Grid, Typography, CardContent } from '@mui/material';
-import Button from '@mui/material/Button';
-
+import Chip from '@mui/material/Chip';
 import Icon from '../Atoms/Icon';
+import InsertInvitationRoundedIcon from '@mui/icons-material/InsertInvitationRounded';
 
 export default function Cards(aux) {
   console.log(aux.aux)
@@ -28,9 +28,18 @@ export default function Cards(aux) {
     }
   }
 
+  function chipColor() {
+    if (aux.aux.sexo === "H") {
+      return "rgba(236, 64, 122, 0.5)"
+    } else {
+      return "rgba(40, 53, 147, 0.5)"
+    }
+  }
+
   const CardStyle = styled(Card)(() => ({
     background: colorCard(),
     position: 'relative',
+    borderRadius: "15px",
     '&:after': {
       content: '""',
       position: 'absolute',
@@ -39,8 +48,9 @@ export default function Cards(aux) {
       border: '19px solid ',
       borderColor: colorLineas(),
       borderRadius: '50%',
-      top: '65px',
-      right: '-150px'
+      top: '30px',
+      right: '-150px',
+      opacity: "50%",
     },
     '&:before': {
       content: '""',
@@ -50,33 +60,34 @@ export default function Cards(aux) {
       border: '3px solid ',
       borderColor: colorLineas(),
       borderRadius: '50%',
-      top: '145px',
-      right: '-70px'
+      top: '90px',
+      right: '-70px',
+      opacity: "50%",
     }
   }));
 
   return (
     <>
-      <CardStyle>
+      <CardStyle style={{ cursor: "pointer" }}>
         <CardContent>
-          <Grid item>
-            <Icon aux={aux} />
-            <Typography variant="h4">{aux.aux.nombre}</Typography>
+          <Grid container>
+            <Grid item lg={4}>
+              <Icon aux={aux} />
+            </Grid>
+            <Grid item lg={4}>
+              <Typography variant="h6">{aux.aux.nombre}</Typography>
+              <Typography variant="body2" color="grey.900" sx={{ opacity: 0.6 }}>
+                <a style={{ float: "left" }}>{aux.aux.sexo}</a> <br></br>
+                <a style={{ float: "left" }}>{aux.aux.edad}</a><br></br>
+              </Typography>
+            </Grid>
+            <Grid item lg={4}>
+              <Chip icon={<InsertInvitationRoundedIcon color='white'/>} label={aux.aux.nacimiento} size='small' variant='filled' style={{backgroundColor: chipColor(), color: "white"}}/>
+            </Grid>
           </Grid>
-          <Grid item>
-            <Typography variant="body1" color="grey.900" sx={{ opacity: 0.6 }}>
-              <a style={{ float: "left" }}>{aux.aux.sexo}</a> <br></br>
-              <a style={{ float: "left" }}>{aux.aux.edad}</a><br></br>
-            </Typography>
-          </Grid>
-          <Button
-            style={{
-              marginLeft: "auto",
-              zIndex: 100,
-              display: "flex",
-              backgroundColor: colorLineas()
-            }}
-            variant="contained"> Ver más </Button>
+          <Typography variant="caption" color="black">
+            <a style={{ float: "left", margin: "5px 0 5px 0" }}>{aux.aux.descripcion}</a> <br></br>
+          </Typography>
         </CardContent>
       </CardStyle>
     </>
