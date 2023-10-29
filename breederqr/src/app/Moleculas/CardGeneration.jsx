@@ -6,6 +6,7 @@ import '@fontsource/roboto/700.css';
 import React from 'react';
 import Cards from './Cards';
 import { Grid } from '@mui/material';
+import MainCard from '../Components/ui-component/cards/MainCard';
 
 export default function CardGeneration() {
     let pacientes = [
@@ -30,17 +31,19 @@ export default function CardGeneration() {
     ]
     return (
         <>
-            <Grid container direction="row" >
-                {pacientes.map((paciente, index) => {
-                    return (
-                        <div key={index}>
-                            <Grid margin={2} width={300}>
-                                <Cards aux={paciente} />
-                            </Grid>
-                        </div>
-                    );
-                })}
-            </Grid>
+            <MainCard title="Ejemplares">
+                <Grid container direction="row" >
+                    {pacientes.map((paciente, index) => {
+                        return (
+                            <div key={index}>
+                                <Grid margin={2} width={300}>
+                                    <Cards aux={paciente} />
+                                </Grid>
+                            </div>
+                        );
+                    })}
+                </Grid>
+            </MainCard>
         </>
     )
 }
