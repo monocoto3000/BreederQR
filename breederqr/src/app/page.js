@@ -1,9 +1,12 @@
+import Nav from './Components/Nav'
 import styles from './page.module.css'
-import Ejemplares from './pages/Ejemplares'
+import Ejemplares from './Ejemplares/page'
 export default function Home() {
   return (
     <main className={styles.main}>
-      <Ejemplares />
+       <h1>
+        HOLA SOY EL DASHBOARD
+       </h1>
     </main>
   )
 }

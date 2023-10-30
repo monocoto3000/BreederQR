@@ -1,4 +1,4 @@
-"use client"
+
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -8,7 +8,7 @@ import Cards from './Cards';
 import { Grid } from '@mui/material';
 
 export default function CardGeneration() {
-    let pacientes = [
+    const pacientes = [
         {
             nombre: "pablo",
             edad: 12,
