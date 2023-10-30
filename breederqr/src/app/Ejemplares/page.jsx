@@ -23,7 +23,7 @@ export default function Ejemplares() {
     };
     return (
         <>
-            <Nav />
+            
             <div style={{ margin: 20 }}>
                 <MainCard title="Ejemplares">
                     <Grid container direction="row" spacing={2}>
