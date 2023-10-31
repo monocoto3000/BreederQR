@@ -37,6 +37,11 @@ const pages = [
   nombrePage: "Repositorio",
   href:"../Ejemplares"
 },
+{
+  
+  nombrePage: "Ejemplar",
+  href:"../Ejemplar"
+},
 ];
 const settings = ['Perfil', 'Cerrar sesión'];
 
