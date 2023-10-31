@@ -23,8 +23,8 @@ const pages = [
 },
 {
   
-  nombrePage: "Blog",
-  href:"../form"
+  nombrePage: "subirImagen",
+  href:"../Imagen"
 },
 {
   
@@ -60,7 +60,7 @@ function Nav() {
   };
 
   return (
-    <AppBar position="static" style={{ background: "#564E58" }}>
+    <AppBar position="static" style={{ background: "#65717d" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -125,3 +125,5 @@ function Nav() {
   );
 }
 export default Nav;
+
+{/*  */}
