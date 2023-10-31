@@ -82,7 +82,7 @@ export default function Cards(aux) {
               </Typography>
             </Grid>
             <Grid item lg={4}>
-              <Chip icon={<InsertInvitationRoundedIcon color='white'/>} label={aux.aux.nacimiento} size='small' variant='filled' style={{backgroundColor: chipColor(), color: "white"}}/>
+              <Chip icon={<InsertInvitationRoundedIcon color='white' />} label={aux.aux.nacimiento} size='small' variant='filled' style={{ backgroundColor: chipColor(), color: "white" }} />
             </Grid>
           </Grid>
           <Typography variant="caption" color="black">
