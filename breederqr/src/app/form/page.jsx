@@ -50,7 +50,7 @@ export default function form() {
                   flexDirection: "column",
                   justifyContent: "center",
                   alignItems: "center",
-                  borderRadius: "5px",
+                  borderRadius: "20px",
                 }}
               >
                 <Grid container direction="row" spacing={0.5}>
@@ -243,14 +243,14 @@ export default function form() {
                   flexDirection: "column",
                   justifyContent: "center",
                   alignItems: "center",
-                  borderRadius: "5px",
+                  borderRadius: "20px",
                 }}
               >
-                <Grid container direction={"row"} spacing={2}>
+                <Grid container direction={"column"} spacing={12}>
                   <Grid item xs={12}>
                     <div
                       style={{
-                        margin: 10,
+                        margin: 10, marginTop:65
                       }}
                     >
                       <Box
@@ -280,7 +280,42 @@ export default function form() {
                     </div>
                   </Grid>
 
-                  <Grid item xs={12}></Grid>
+                 
+
+                  <Grid item xs={12}>
+                    <div
+                      style={{
+                        margin: 10, marginBottom:65
+                      }}
+                    >
+                      <Box
+                        sx={{ minWidth: 120 }}
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <img src="https://w7.pngwing.com/pngs/619/184/png-transparent-qr-code-barcode-scanners-scanner-q-text-rectangle-logo.png" alt="Qr" className="animalito"/>
+                      </Box>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "center",
+                          marginTop: "10px",
+                        }}
+                      >
+                        <Stack spacing={2} direction="row">
+                          <ColorButton variant="contained">
+                            Generar Qr
+                          </ColorButton>
+                        </Stack>
+                      </div>
+                    </div>
+                  </Grid>
+                  
+
                 </Grid>
               </div>
             </Grid>
