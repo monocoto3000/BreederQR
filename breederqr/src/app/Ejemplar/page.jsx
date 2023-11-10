@@ -12,6 +12,7 @@ import { Card, Grid, Typography, CardContent } from '@mui/material';
 import Icon from "../Atoms/Icon";
 import Chip from '@mui/material/Chip';
 import InsertInvitationRoundedIcon from '@mui/icons-material/InsertInvitationRounded';
+import Divider from '@mui/material/Divider';
 
 export default function Ejemplares() {
     const [age, setAge] = React.useState('');
@@ -33,6 +34,7 @@ export default function Ejemplares() {
         { id: 2, nombre: 'Pancho', sexo: "M", nacimiento: "12/42/2004", img: "https://via.placeholder.com/300.png/09f/fff", especie: "Rojo", parentesco: "Papá" },
         { id: 3, nombre: 'Ernesto', sexo: "H", nacimiento: "12/42/2004", img: "https://via.placeholder.com/300.png/09f/fff", especie: "Azul", parentesco: "Hermano" },
         { id: 4, nombre: 'Pedro', sexo: "M", nacimiento: "12/42/2004", img: "https://via.placeholder.com/300.png/09f/fff", especie: "Depende" },
+        { id: 5, nombre: 'Norm', sexo: "M", nacimiento: "12/42/2004", img: "https://via.placeholder.com/300.png/09f/fff", especie: "Pulpo" },
     ];
     function chipColor(card) {
         if (card.sexo === "H") {
@@ -92,39 +94,44 @@ export default function Ejemplares() {
             <div style={{ margin: 20 }}>
                 <MainCard title="Nombre del ejemplar">
                     <Grid container direction="row" spacing={2}>
-                        <Grid container xs={12} lg={6} style={{ backgroundColor: "#564E58", boxSizing: "border-box", borderRadius: 20, padding: 20, margin: 10 }}>
-                            <Grid item xs={12} lg={3}>
+                        <Grid container xs={12} lg={6} style={{  boxSizing: "border-box", margin: 30 }} spacing={2  }>
+                            <Grid item>
                                 <img
                                     style={{ borderRadius: "100%", width: 200, height: 200, float: "left", marginRight: 15 }}
                                     src={pacientes[0].img}
                                     alt="new"
                                 />
                             </Grid>
-                            <Grid item xs={12} lg={9}>
-                                <Typography variant="h4" gutterBottom color={"white"} fullWidth>
-                                    Nombre: {pacientes[0].nombre}
+                            <Divider orientation="vertical" flexItem>
+                            </Divider>
+                            <Grid item>
+                                <Typography variant="h5" gutterBottom fullWidth>
+                                    <Chip label={pacientes[0].nombre} variant="outlined" />
                                 </Typography>
-                                <Typography variant="h4" gutterBottom color={"white"} fullWidth>
+                                <Typography variant="h5" gutterBottom  fullWidth>
                                     Edad: {pacientes[0].edad}
                                 </Typography>
-                                <Typography variant="h4" gutterBottom color={"white"} fullWidth>
-                                    Fecha de nacimiento: {pacientes[0].nacimiento}
+                                <Typography variant="h5" gutterBottom  fullWidth>
+                                    <b>Fecha de nacimiento:</b> {pacientes[0].nacimiento}
                                 </Typography>
-                                <Typography variant="h4" gutterBottom color={"white"} fullWidth>
-                                    Edad: {pacientes[0].especie}
+                                <Typography variant="h5" gutterBottom  fullWidth>
+                                    Edad: {pacientes[0].edad} Años
+                                </Typography>
+                                <Typography variant="h5" gutterBottom fullWidth>
+                                    Especie: {pacientes[0].especie} Años
                                 </Typography>
                             </Grid>
                             <Grid container spacing={2}>
-                                <Grid item lg={1}>
+                                <Grid item xs={12} lg={1}>
                                     <button onClick={prevCard}>Anterior</button>
                                 </Grid>
                                 <Grid item xs={12} lg={10}>
-                                    <div className="carousel-container">
+                                    <div style={{ display: "flex", overflow: "hidden" }}>
                                         {cardData
                                             .slice(startIndex, startIndex + cardsPerPage)
                                             .map((card) => (
                                                 <Grid item xs={12} lg={3}>
-                                                    <div key={card.id} className="card">
+                                                    <div key={card.id} style={{ padding: "10px" }}>
                                                         <CardStyle>
                                                             <CardContent>
                                                                 <Grid container direction={"row"}>
@@ -146,21 +153,11 @@ export default function Ejemplares() {
                                                     </div>
                                                 </Grid>
                                             ))}
-                                        <Grid item xs={12} lg={1}>
-                                            <button onClick={nextCard}>Siguiente</button>
-                                        </Grid>
-                                        <style jsx>{`
-        .carousel-container {
-          display: flex;
-          overflow: hidden;
-        }
-        .card {
-          padding: 10px;
-        }
-      `}</style>
                                     </div>
                                 </Grid>
-
+                                <Grid item xs={12} lg={1}>
+                                    <button onClick={nextCard}>Siguiente</button>
+                                </Grid>
                             </Grid>
                         </Grid>
                         <Grid item xs={12} lg={5}>

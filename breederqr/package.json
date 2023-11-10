@@ -25,6 +25,7 @@
     "react-apexcharts": "^1.4.1",
     "react-dom": "^18",
     "react-router-dom": "^6.17.0",
+    "shortid": "^2.2.16",
     "styled-components": "^6.1.0"
   }
 }

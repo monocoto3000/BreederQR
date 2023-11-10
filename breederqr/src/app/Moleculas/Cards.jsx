@@ -71,7 +71,7 @@ export default function Cards(aux) {
       <CardStyle style={{ cursor: "pointer" }}>
         <CardContent>
           <Grid container>
-            <Grid item lg={3}>
+            <Grid item lg={4}>
               <Icon aux={aux.aux} />
             </Grid>
             <Grid item lg={4}>
