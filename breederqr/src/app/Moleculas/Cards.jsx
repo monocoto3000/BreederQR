@@ -39,7 +39,8 @@ export default function Cards(aux) {
   const CardStyle = styled(Card)(() => ({
     background: colorCard(),
     position: 'relative',
-    borderRadius: "15px",
+    borderRadius: "10px",
+    margin: 10,
     '&:after': {
       content: '""',
       position: 'absolute',
