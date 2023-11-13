@@ -10,13 +10,13 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <Grid container direction="row" spacing={2}>
-
-        <Grid margin={3} direction={"column"} display={"grid"} container item xs={12} lg={4} spacing={4}>
+        <Grid margin={3} direction={"column"}  item xs={12} lg={3} spacing={2}>
             <CardGeneration/>
         </Grid>
-
         <Grid item lg={6} margin={3} display={"grid"} >
-        <Box>
+        <Box
+        width={500}
+        >
           <MortalityRate
             title="Taza de nacimiento"
             chart={{
@@ -27,11 +27,8 @@ export default function Home() {
             }}
           />
         </Box>
-        <Box>
           <SalesRate/>
-        </Box>
         </Grid>
-
       </Grid>
     </main>
   );
