@@ -1,49 +1,45 @@
-"use client"
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
-import Enlaces from '../Atoms/Enlaces';
+"use client";
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import AdbIcon from "@mui/icons-material/Adb";
+import Enlaces from "../Atoms/Enlaces";
+import { Grid } from "@mui/material";
+import "../../css/form.css"
 
 const pages = [
-{
-  
-  nombrePage: "Dashboard",
-  href:"../"
-},
-{
-  
-  nombrePage: "subirImagen",
-  href:"../Imagen"
-},
-{
-  
-  nombrePage: "Contactanos",
-  href:"../form"
-}
-,
-{
-  
-  nombrePage: "Repositorio",
-  href:"../Ejemplares"
-},
-{
-  
-  nombrePage: "Ejemplar",
-  href:"../Ejemplar"
-},
+  {
+    nombrePage: "Inicio",
+    href: "../",
+  },
+  {
+    nombrePage: "Servicios",
+    href: "../Imagen",
+  },
+  {
+    nombrePage: "Galeria",
+    href: "../form",
+  },
+  {
+    nombrePage: "Contactanos",
+    href: "../Ejemplares",
+  },
+  {
+    nombrePage: "Opcion5",
+    href: "../Ejemplar",
+  },
 ];
-const settings = ['Perfil', 'Cerrar sesión'];
+const settings = ["Perfil", "Cerrar sesión"];
 
 function Nav() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -95,13 +91,12 @@ function Nav() {
                     display: "flex",
                   }}
                 >
-                  LOGO
+                  BREEDER QR
                 </Typography>
               </div>
             </Grid>
 
             <Grid item xs={12} lg={10}>
-             
                 <Grid Container spacing={2} className="nav">
                   {pages.map((page) => (
                     <Enlaces {...page} />

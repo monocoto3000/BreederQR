@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { Button, Card, Grid, TextField } from "@mui/material";
+import "../../css/form.css"
 
 export default function page() {
   return (
@@ -17,7 +18,7 @@ export default function page() {
                 backgroundColor: "#65717d",
               }}
             >
-              <img src="" alt="imagenLogin" className="imagenLogin" />
+              <img src="https://alfareptiles.com.mx/cdn/shop/products/gecko-leopardo-blood-macho-309038.jpg?v=1699380513&width=533" alt="imagenLogin" className="imagenLogin" />
             </div>
           </Grid>
           <Grid item xs={12} lg={6}>
