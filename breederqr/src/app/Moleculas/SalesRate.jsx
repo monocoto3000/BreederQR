@@ -17,7 +17,6 @@ export default function SalesRate() {
           data: [2, 14, 21],
         },
       ]}
-      width={1000}
       height={600}
     />
   );
