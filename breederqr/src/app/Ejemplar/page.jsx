@@ -2,22 +2,51 @@
 import React from "react";
 import MainCard from "../Components/ui-component/cards/MainCard";
 import Box from '@mui/material/Box';
-import { useState } from "react";
 import { styled } from '@mui/material/styles';
-import { Card, Grid, Typography, CardContent } from '@mui/material';
+import { Card, Grid, Typography, CardContent, Button } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CardMedia from '@mui/material/CardMedia';
 import Chip from '@mui/material/Chip';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import { Page, Text, Document, Image, View } from "@react-pdf/renderer"
+import CircularProgress from '@mui/material/CircularProgress';
+import MuiAccordionDetails from '@mui/material/AccordionDetails';
+import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+import MuiAccordion from '@mui/material/Accordion';
+import MuiAccordionSummary from '@mui/material/AccordionSummary';
 
 export default function Ejemplares() {
-    const [age, setAge] = React.useState('');
+    const [open, setOpen] = React.useState(false);
     const [expanded, setExpanded] = React.useState(false);
     const handleAcordion = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
+    const styles = ({
+        body: {
+            paddingTop: 35,
+            paddingBottom: 65,
+            paddingHorizontal: 35,
+        }
+    });
+    const QR = () => {
+        return (
+            <Document>
+                <Page wrap style={styles.body}>
+                    <Text>soy un qr</Text>
+                </Page>
+            </Document>
+        )
+    }
     const pacientes = [
         {
             nombre: "Gecko3000",
@@ -30,8 +59,8 @@ export default function Ejemplares() {
         }]
     const cardData = [
         { id: 1, nombre: 'Felipe', sexo: "H", nacimiento: "12/42/2004", img: "https://via.placeholder.com/300.png/09f/fff", especie: "Astrolopitecus", parentesco: "Mamá" },
-        { id: 2, nombre: 'Pancho', sexo: "M", nacimiento: "12/42/2004", img: "https://via.placeholder.com/300.png/09f/fff", especie: "Tiranosaurio Rex", parentesco: "Papá" },
-        { id: 3, nombre: 'Ernesto', sexo: "H", nacimiento: "12/42/2004", img: "https://via.placeholder.com/300.png/09f/fff", especie: "Calamar Azul", parentesco: "Hermano" },
+        { id: 2, nombre: 'Pancho', sexo: "M", nacimiento: "12/42/2004", img: "https://via.placeholder.com/300.png/09f/fff", especie: "Tiranosaurio", parentesco: "Papá" },
+        { id: 3, nombre: 'Ernesto', sexo: "H", nacimiento: "12/42/2004", img: "https://via.placeholder.com/300.png/09f/fff", especie: "Calamar", parentesco: "Hermano" },
     ];
     const Notas = [
         { id: 1, titulo: 'Nota 1', nota: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sed nisi nunc. Integer nec turpis in urna eleifend imperdiet nec in augue. Curabitur dignissim sodales augue", fecha: "12/42/2004" },
@@ -54,52 +83,78 @@ export default function Ejemplares() {
         { img: "https://via.placeholder.com/300.png/09f/fff" },
         { img: "https://via.placeholder.com/300.png/09f/fff" },
     ];
-    function chipColor(card) {
-        if (card.sexo === "H") {
-            return "rgba(236, 64, 122, 0.5)"
-        } else {
-            return "rgba(40, 53, 147, 0.5)"
-        }
-    }
 
-    const CardStyle = styled(Card)(() => ({
-        background: "rgba(208, 220, 173, 1)",
-        position: 'relative',
-        borderRadius: "15px",
-        paddingBottom: 10,
-        '&:after': {
-            content: '""',
-            position: 'absolute',
-            width: '200px',
-            height: '200px',
-            border: '19px solid ',
-            borderColor: "rgba(167, 198, 80, 1)",
-            borderRadius: '50%',
-            top: '30px',
-            right: '-150px',
-            opacity: "50%",
-        },
-        '&:before': {
-            content: '""',
-            position: 'absolute',
-            width: '200px',
-            height: '200px',
-            border: '3px solid ',
-            borderColor: "rgba(167, 198, 80, 1)",
-            borderRadius: '50%',
-            top: '90px',
-            right: '-70px',
-            opacity: "50%",
+    const AccordionSummary = styled((props) => (
+        <MuiAccordionSummary
+          expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
+          {...props}
+        />
+      ))(({ theme }) => ({
+        backgroundColor:
+          theme.palette.mode === 'dark'
+            ? 'rgba(255, 255, 255, .05)'
+            : 'rgba(0, 0, 0, .02)',
+        flexDirection: 'row-reverse',
+        '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+          transform: 'rotate(-90deg)',
         }
-    }));
-
+      }));
 
     return (
         <>
             <div style={{ margin: 20 }}>
+                <Box sx={{ width: '100%' }}>
+                    <Collapse in={open}>
+                        <Alert
+                            severity="error"
+                            action={
+                                <IconButton
+                                    aria-label="close"
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => {
+                                        setOpen(false);
+                                    }}
+                                >
+                                    <CloseIcon fontSize="inherit" />
+                                </IconButton>
+                            }
+                        >
+                            <Typography variant="caption" fontSize={18}>
+                                <AlertTitle><strong>¿Desea eliminar al ejemplar {pacientes[0].nombre}?</strong></AlertTitle>
+                            </Typography>
+                            <Typography variant="caption" fontSize={15}>
+                                Para continuar presione <strong>ELIMINAR</strong>
+                            </Typography>
+                            <br></br>
+                            <Button
+                                    variant="outlined"
+                                    color="error"
+                                    style={{ marginTop: 5 }}
+                                    startIcon={<DeleteIcon />}>
+                                    Eliminar
+                                </Button>
+                        </Alert>
+                    </Collapse>
+                </Box>
                 <Grid container direction="row" spacing={2}>
                     <Grid item xs={12} lg={6}>
-                        <MainCard title={pacientes[0].nombre}>
+                        <MainCard title={
+                            <>
+                                {pacientes[0].nombre}
+                                <Button
+                                    variant="outlined"
+                                    color="error"
+                                    style={{ float: "right", marginRight: 10 }}
+                                    startIcon={<DeleteIcon />}
+                                    onClick={() => {
+                                        setOpen(true);
+                                    }}>
+                                    Eliminar
+                                </Button>
+                                <Button variant="outlined" style={{ float: "right", marginRight: 10 }} startIcon={<ModeEditIcon />}>Editar</Button>
+                            </>
+                        }>
                             <Grid container spacing={2} direction={"row"}>
                                 <Grid item xs={12} lg={4}>
                                     <div style={{ textAlign: "center" }}>
@@ -110,15 +165,17 @@ export default function Ejemplares() {
                                         />
                                     </div>
                                 </Grid>
-                                <Grid item xs={12} lg={6}>
+                                <Grid item xs={12} lg={8}>
+                                    <Chip label={
+                                        <Typography variant="subtitle1">
+                                            <b>{pacientes[0].nacimiento}</b>
+                                        </Typography>
+                                    } variant="outlined" style={{ float: "right" }} />
                                     <Typography variant="h5" gutterBottom>
                                         <b>Sexo:</b> {pacientes[0].sexo}
                                     </Typography>
                                     <Typography variant="h5" gutterBottom>
-                                        <b>Fecha de nacimiento:</b> {pacientes[0].nacimiento}
-                                    </Typography>
-                                    <Typography variant="h5" gutterBottom>
-                                       <b>Edad:</b> {pacientes[0].edad} Años
+                                        <b>Edad:</b> {pacientes[0].edad} Años
                                     </Typography>
                                     <Typography variant="h5" gutterBottom>
                                         <b>Especie:</b> {pacientes[0].especie}
@@ -138,8 +195,8 @@ export default function Ejemplares() {
                                                                 <Typography variant="caption" color="text.secondary" component="div">
                                                                     {card.nacimiento}
                                                                 </Typography>
-                                                                <Typography component="div" variant="h5">
-                                                                    {card.nombre}
+                                                                <Typography component="div" variant="subtitle1">
+                                                                    <b>{card.nombre}</b>
                                                                 </Typography>
                                                                 <Typography variant="subtitle1" color="text.secondary" component="div">
                                                                     {card.parentesco}
@@ -172,13 +229,16 @@ export default function Ejemplares() {
                                 <Typography variant="subtitle1" gutterBottom>
                                     {pacientes[0].descripcion}
                                 </Typography>
+                                <PDFDownloadLink document={<QR />} fileName={pacientes[0].nombre + "_qr"}>
+                                    {({ loading }) => (loading ? <Button variant="outlined"><CircularProgress />Generando QR</Button> : <Button variant="outlined">Generar QR</Button>)}
+                                </PDFDownloadLink>
                             </Grid>
                         </MainCard>
                     </Grid>
                     <Grid item xs={12} lg={6}>
                         <MainCard title="Notas">
                             {Notas.map((nota) => (
-                                <Accordion expanded={expanded === nota.id} onChange={handleAcordion(nota.id)}>
+                                <Accordion expanded={expanded === nota.id} onChange={handleAcordion(nota.id)} elevation={0} disableGutters>
                                     <AccordionSummary
                                         expandIcon={<ExpandMoreIcon />}
                                         aria-controls="panel1bh-content"
@@ -202,7 +262,7 @@ export default function Ejemplares() {
                                 {imagenes.map((imagen) => (
                                     <Grid item xs md lg={2}>
                                         <img
-                                            style={{ borderRadius: 10, width: 120, height: 120 }}
+                                            style={{ borderRadius: 10, width: 100, height: 100 }}
                                             src={imagen.img}
                                             alt="new"
                                         />

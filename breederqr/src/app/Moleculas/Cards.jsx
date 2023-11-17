@@ -40,7 +40,6 @@ export default function Cards(aux) {
     background: colorCard(),
     position: 'relative',
     borderRadius: "10px",
-    margin: 10,
     '&:after': {
       content: '""',
       position: 'absolute',
