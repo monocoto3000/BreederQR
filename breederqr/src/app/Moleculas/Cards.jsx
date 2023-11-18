@@ -39,7 +39,7 @@ export default function Cards(aux) {
   const CardStyle = styled(Card)(() => ({
     background: colorCard(),
     position: 'relative',
-    borderRadius: "15px",
+    borderRadius: "10px",
     '&:after': {
       content: '""',
       position: 'absolute',
@@ -72,12 +72,13 @@ export default function Cards(aux) {
         <CardContent>
           <Grid container>
             <Grid item lg={4}>
-              <Icon aux={aux} />
+              <Icon aux={aux.aux} />
             </Grid>
             <Grid item lg={4}>
               <Typography variant="h6">{aux.aux.nombre}</Typography>
               <Typography variant="body2" color="grey.900" sx={{ opacity: 0.6 }}>
                 <a style={{ float: "left" }}>{aux.aux.sexo}</a> <br></br>
+                <a style={{ float: "left" }}>{aux.aux.especie}</a> <br></br>
                 <a style={{ float: "left" }}>{aux.aux.edad}</a><br></br>
               </Typography>
             </Grid>

@@ -11,7 +11,7 @@ export default function Icon(aux) {
         <>
             <img
                 style={{ borderRadius: "100%", width: 90, height: 90, float: "left", marginRight: 15 }}
-                src={aux.aux.aux.img}
+                src={aux.aux.img}
                 alt="new"
             />
         </>

@@ -1,6 +1,5 @@
 "use client"
 import React from "react";
-import Nav from "../Components/Nav";
 import MainCard from "../Components/ui-component/cards/MainCard";
 import { Grid } from '@mui/material';
 import CardGeneration from "../Moleculas/CardGeneration";
@@ -23,7 +22,7 @@ export default function Ejemplares() {
     };
     return (
         <>
-            
+
             <div style={{ margin: 20 }}>
                 <MainCard title="Ejemplares">
                     <Grid container direction="row" spacing={2}>
