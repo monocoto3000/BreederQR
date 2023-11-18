@@ -24,6 +24,12 @@ import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
+import AddIcon from '@mui/icons-material/Add';
+import Backdrop from '@mui/material/Backdrop';
+import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
+import InputLabel from '@mui/material/InputLabel';
+import TextField from '@mui/material/TextField';
 
 export default function Ejemplares() {
     const [open, setOpen] = React.useState(false);
@@ -38,6 +44,16 @@ export default function Ejemplares() {
             paddingHorizontal: 35,
         }
     });
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: "60%",
+        bgcolor: 'background.paper',
+        boxShadow: 24,
+        p: 4,
+    };
     const QR = () => {
         return (
             <Document>
@@ -86,20 +102,22 @@ export default function Ejemplares() {
 
     const AccordionSummary = styled((props) => (
         <MuiAccordionSummary
-          expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
-          {...props}
+            expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
+            {...props}
         />
-      ))(({ theme }) => ({
+    ))(({ theme }) => ({
         backgroundColor:
-          theme.palette.mode === 'dark'
-            ? 'rgba(255, 255, 255, .05)'
-            : 'rgba(0, 0, 0, .02)',
+            theme.palette.mode === 'dark'
+                ? 'rgba(255, 255, 255, .05)'
+                : 'rgba(0, 0, 0, .02)',
         flexDirection: 'row-reverse',
         '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
-          transform: 'rotate(-90deg)',
+            transform: 'rotate(-90deg)',
         }
-      }));
-
+    }));
+    const [openModal, setOpenModal] = React.useState(false);
+    const handleOpen = () => setOpenModal(true);
+    const handleClose = () => setOpenModal(false);
     return (
         <>
             <div style={{ margin: 20 }}>
@@ -128,12 +146,12 @@ export default function Ejemplares() {
                             </Typography>
                             <br></br>
                             <Button
-                                    variant="outlined"
-                                    color="error"
-                                    style={{ marginTop: 5 }}
-                                    startIcon={<DeleteIcon />}>
-                                    Eliminar
-                                </Button>
+                                variant="outlined"
+                                color="error"
+                                style={{ marginTop: 5 }}
+                                startIcon={<DeleteIcon />}>
+                                Eliminar
+                            </Button>
                         </Alert>
                     </Collapse>
                 </Box>
@@ -236,7 +254,18 @@ export default function Ejemplares() {
                         </MainCard>
                     </Grid>
                     <Grid item xs={12} lg={6}>
-                        <MainCard title="Notas">
+                        <MainCard title={
+                            <>
+                                Notas
+                                <Button
+                                    variant="outlined"
+                                    style={{ float: "right", marginRight: 10 }}
+                                    startIcon={<AddIcon />}
+                                    onClick={handleOpen}>
+                                    Agregar
+                                </Button>
+                            </>
+                        }>
                             {Notas.map((nota) => (
                                 <Accordion expanded={expanded === nota.id} onChange={handleAcordion(nota.id)} elevation={0} disableGutters>
                                     <AccordionSummary
@@ -272,6 +301,58 @@ export default function Ejemplares() {
                         </MainCard>
                     </Grid>
                 </Grid>
+                <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    open={openModal}
+                    onClose={handleClose}
+                    closeAfterTransition
+                    slots={{ backdrop: Backdrop }}
+                    slotProps={{
+                        backdrop: {
+                            timeout: 500,
+                        },
+                    }}
+                >
+                    <Fade in={openModal}>
+                        <Box sx={style}>
+                            <Grid container spacing={2}>
+                                <Grid item lg={12} xs={12}>
+                                    <Typography variant="h6" component="h2">
+                                        Crear nota
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12} lg={6}>
+                                    <InputLabel style={{ fontSize: 12 }}>
+                                        Titulo
+                                    </InputLabel>
+                                    <TextField
+                                        fullWidth />
+                                </Grid>
+                                <Grid item xs={12} lg={6}>
+                                    <InputLabel style={{ fontSize: 12 }}>
+                                        Fecha
+                                    </InputLabel>
+                                    <TextField
+                                        defaultValue={new Date().toDateString()}
+                                        fullWidth />
+                                </Grid>
+                                <Grid item xs={12} lg={12}>
+                                    <InputLabel style={{ fontSize: 12 }}>
+                                        Nota
+                                    </InputLabel>
+                                    <TextField
+                                        fullWidth
+                                        multiline
+                                        />
+                                </Grid>
+                                <Grid item xs={12} lg={12}>
+                                    <Button fullWidth variant='outlined' onClick={handleClose}>guardar</Button>
+                                </Grid>
+                            </Grid>
+                        </Box>
+                    </Fade>
+                </Modal>
             </div>
         </>
     )

@@ -1,59 +1,53 @@
-"use client"
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
-import Enlaces from '../Atoms/Enlaces';
+"use client";
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import AdbIcon from "@mui/icons-material/Adb";
+import Enlaces from "../Atoms/Enlaces";
+import { Grid } from "@mui/material";
+import "../../css/form.css"
+import InputAdornment from '@mui/material/InputAdornment';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Backdrop from '@mui/material/Backdrop';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
-import Grid from '@mui/material/Grid';
-import InputAdornment from '@mui/material/InputAdornment';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import FilledInput from '@mui/material/FilledInput';
-import { Button, OutlinedInput } from '@mui/material';
+import { OutlinedInput } from '@mui/material';
 
 const pages = [
   {
-
-    nombrePage: "Dashboard",
-    href: "../"
+    nombrePage: "Inicio",
+    href: "../",
   },
   {
-
-    nombrePage: "subirImagen",
-    href: "../Imagen"
+    nombrePage: "Servicios",
+    href: "../Imagen",
   },
   {
-
+    nombrePage: "Galeria",
+    href: "../form",
+  },
+  {
     nombrePage: "Contactanos",
-    href: "../form"
-  }
-  ,
-  {
-
-    nombrePage: "Repositorio",
-    href: "../Ejemplares"
+    href: "../Ejemplares",
   },
   {
-
-    nombrePage: "Ejemplar",
-    href: "../Ejemplar"
+    nombrePage: "Opcion5",
+    href: "../Ejemplar",
   },
 ];
-
 const perfil = [{
   nombre: "Cesar",
   apellido_paterno: "Hernandez",
@@ -62,8 +56,6 @@ const perfil = [{
   correo: "cesars@gmail.com",
   contrasenia: "1234"
 }]
-
-
 const style = {
   position: 'absolute',
   top: '50%',
@@ -74,7 +66,6 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-
 function Nav() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -83,7 +74,7 @@ function Nav() {
   const handleClose = () => setOpen(false);
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-
+  
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
@@ -139,11 +130,11 @@ function Nav() {
             </Grid>
 
             <Grid item xs={12} lg={10}>
-                <Grid Container spacing={2} className="nav">
-                  {pages.map((page) => (
-                    <Enlaces {...page} />
-                  ))}
-                </Grid>
+              <Grid Container spacing={2} className="nav">
+                {pages.map((page) => (
+                  <Enlaces {...page} />
+                ))}
+              </Grid>
             </Grid>
 
             <Grid item xs={12} lg={1}>
@@ -161,8 +152,7 @@ function Nav() {
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                       <Avatar
                         alt="Remy Sharp"
-                        src="/static/images/avatar/2.jpg"
-                      />
+                        src="/static/images/avatar/2.jpg" />
                     </IconButton>
                   </Tooltip>
                   <Menu
@@ -181,14 +171,21 @@ function Nav() {
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
                   >
-                    {settings.map((setting) => (
-                      <MenuItem
-                        // key={setting}
-                        onClick={handleCloseUserMenu}
-                      >
-                        <Typography textAlign="center">{setting}</Typography>
-                      </MenuItem>
-                    ))}
+                    <MenuItem>
+                      <Typography textAlign="center" variant='caption'>Nombre: <strong>{perfil[0].nombre} {perfil[0].apellido_paterno} {perfil[0].apellido_materno}</strong></Typography>
+                    </MenuItem>
+                    <MenuItem>
+                      <Typography textAlign="center" variant='caption'>Nombre de usuario: <strong>{perfil[0].usuario}</strong></Typography>
+                    </MenuItem>
+                    <MenuItem>
+                      <Typography textAlign="center" variant='caption'>Correo: <strong>{perfil[0].correo}</strong></Typography>
+                    </MenuItem>
+                    <MenuItem onClick={handleOpen}>
+                      <Typography textAlign="center" variant='caption'><strong>Editar perfil</strong></Typography>
+                    </MenuItem>
+                    <MenuItem>
+                      <Typography textAlign="center" variant='caption' style={{ color: "#b71c1c" }}><strong>Cerrar sesion</strong></Typography>
+                    </MenuItem>
                   </Menu>
                 </Box>
               </div>
@@ -223,8 +220,7 @@ function Nav() {
                 </InputLabel>
                 <TextField
                   defaultValue={perfil[0].nombre}
-                  fullWidth
-                />
+                  fullWidth />
               </Grid>
               <Grid item xs={12} lg={4}>
                 <InputLabel style={{ fontSize: 12 }}>
@@ -232,8 +228,7 @@ function Nav() {
                 </InputLabel>
                 <TextField
                   defaultValue={perfil[0].apellido_paterno}
-                  fullWidth
-                />
+                  fullWidth />
               </Grid>
               <Grid item xs={12} lg={4}>
                 <InputLabel style={{ fontSize: 12 }}>
@@ -241,8 +236,7 @@ function Nav() {
                 </InputLabel>
                 <TextField
                   defaultValue={perfil[0].apellido_materno}
-                  fullWidth
-                />
+                  fullWidth />
               </Grid>
               <Grid item xs={12} lg={4}>
                 <InputLabel style={{ fontSize: 12 }}>
@@ -250,8 +244,7 @@ function Nav() {
                 </InputLabel>
                 <TextField
                   defaultValue={perfil[0].usuario}
-                  fullWidth
-                />
+                  fullWidth />
               </Grid>
               <Grid item xs={12} lg={4}>
                 <InputLabel style={{ fontSize: 12 }}>
@@ -259,8 +252,7 @@ function Nav() {
                 </InputLabel>
                 <TextField
                   defaultValue={perfil[0].correo}
-                  fullWidth
-                />
+                  fullWidth />
               </Grid>
               <Grid item xs={12} lg={4}>
                 <InputLabel style={{ fontSize: 12 }}>
@@ -270,18 +262,15 @@ function Nav() {
                   type={showPassword ? 'text' : 'password'}
                   defaultValue={perfil[0].contrasenia}
                   fullWidth
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        edge="end"
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                />
+                  endAdornment={<InputAdornment position="end">
+                    <IconButton
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>} />
               </Grid>
               <Grid item xs={12} lg={12}>
                 <Button fullWidth variant='outlined' onClick={handleClose}>Guardar</Button>
@@ -289,10 +278,7 @@ function Nav() {
             </Grid>
           </Box>
         </Fade>
-      </Modal>
-    </>
+      </Modal></>
   );
 }
 export default Nav;
-
-{/*  */ }
