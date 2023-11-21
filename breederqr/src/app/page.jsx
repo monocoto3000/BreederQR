@@ -19,30 +19,20 @@ import TextField from '@mui/material/TextField';
 import config from "../../config";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import fetch from 'node-fetch';
+
+const baseURL = "http://localhost:8080/breedingPlace/getBreedingPlace"
+const token = config.auth.token
+const body = {"token": token};
+const response = await fetch(baseURL, {
+	method: 'post',
+	body: JSON.stringify(body),
+	headers: {'Content-Type': 'application/json'}
+});
+const data = await response.json();
+console.log(data);
 
 export default function Home() {
-  const token = config.auth.token
-  console.log(token)
-  const baseURL = "http://localhost:8080/breedingPlace/getBreedingPlace"
-  const [criadero, setCriadero] = useState(null);
-  useEffect(() => {
-    axios.get(baseURL, {
-      headers: {
-        "Content-Type":"application/json",
-        Authorization: `Bearer ${token}`
-      },
-      params: {
-        "token": token
-      }
-    })
-      .then(response => {
-        setCriadero(response?.data);
-      })
-      .catch(error => {
-        console.log(error)
-      });
-  }, []);
-  console.log(criadero)
   const style = {
     position: 'absolute',
     top: '50%',
