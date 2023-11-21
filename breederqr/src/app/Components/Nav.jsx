@@ -6,7 +6,6 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -14,7 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import Enlaces from "../Atoms/Enlaces";
-import { Grid } from "@mui/material";
+import { Grid } from "@mui/material"; 
 import "../../css/form.css"
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
@@ -98,7 +97,7 @@ function Nav() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Grid container spacing={2}>
-            <Grid item xs={12} lg={1}>
+            <Grid item xs={12} lg={1.5}>
               <div
                 style={{
                   display: "flex",
@@ -129,7 +128,7 @@ function Nav() {
               </div>
             </Grid>
 
-            <Grid item xs={12} lg={10}>
+            <Grid item xs={12} lg={9.5}>
               <Grid Container spacing={2} className="nav">
                 {pages.map((page) => (
                   <Enlaces {...page} />

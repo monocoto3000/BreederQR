@@ -1,17 +1,16 @@
-import './globals.css'
-import Nav from './Components/Nav'
+import "../css/form.css";
+import Nav from "./Components/Nav";
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
         <header>
-          <Nav/>
+          <Nav />
         </header>
-        <main>
-          {children}
-        </main>
-        </body>
+
+        <main>{children}</main>
+      </body>
     </html>
-  )
+  );
 }
