@@ -44,19 +44,18 @@ export default function page() {
           user: "",
           password: "",
         }}
-        validationSchema={Yup.object().shape({
-          email: Yup.string()
-            .email("Debe Ser un Correo Valido")
-            .max(255)
-            .required("Es necesario Un Correo"),
-          password: Yup.string()
-            .max(255)
-            .required("Es necesaria una Contraseña"),
-        })}
+        // validationSchema={Yup.object().shape({
+        //   email: Yup.string()
+        //     .email("Debe Ser un Correo Valido")
+        //     .max(255)
+        //     .required("Es necesario Un Correo"),
+        //   password: Yup.string()
+        //     .max(255)
+        //     .required("Es necesaria una Contraseña"),
+        // })}
         onSubmit={async (values) => {
-          console.log("funciona pa");
-          const token = Cookies.get("token");
           try {
+            console.log("si")
             axios
               .post(baseUrl, {
                 params: {
@@ -65,7 +64,21 @@ export default function page() {
                 }
               })
               .then((response) => {
-                setPost(response.data);
+                console.log(response);
+                const token = response.data.password;
+                const expires = response.headers["expires"];
+                Cookies.set("token", token, { expires: new Date(expires) });
+                if (response.data != "") {
+                  setStatus({ success: true });
+                  setSubmitting(true);
+                  console.log("si")
+                  window.location.href = "http://localhost:3000/";
+                } else {
+                  setStatus({ success: false });
+                  setErrors({ submit: "Usuario o Contraseña incorrecta" });
+                  setSubmitting(false);
+                  console.log("Usuario o Contraseña incorrecta")
+                }
               });
           } catch (error) {
             console.error(err);
