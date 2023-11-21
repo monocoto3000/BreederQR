@@ -32,7 +32,7 @@ export default function page() {
   }));
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const baseUrl = ".........";
+  const baseUrl = "http://localhost:8080/auth/login"
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
@@ -65,19 +65,7 @@ export default function page() {
                 }
               })
               .then((response) => {
-                console.log(response);
-                const token = response.data.password;
-                const expires = response.headers["expires"];
-                Cookies.set("token", token, { expires: new Date(expires) });
-                if (response.data != "") {
-                  setStatus({ success: true });
-                  setSubmitting(true);
-                  window.location.href = "http://localhost:3000/";
-                } else {
-                  setStatus({ success: false });
-                  setErrors({ submit: "Usuario o Contraseña incorrecta" });
-                  setSubmitting(false);
-                }
+                setPost(response.data);
               });
           } catch (error) {
             console.error(err);
