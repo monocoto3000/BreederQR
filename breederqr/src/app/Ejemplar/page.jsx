@@ -3,7 +3,7 @@ import React from "react";
 import MainCard from "../Components/ui-component/cards/MainCard";
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
-import { Card, Grid, Typography, CardContent, Button } from '@mui/material';
+import { Card, Grid, Typography, CardContent, Button, Autocomplete } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -30,6 +30,7 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import InputLabel from '@mui/material/InputLabel';
 import TextField from '@mui/material/TextField';
+import { Formik } from 'formik';
 
 export default function Ejemplares() {
     const [open, setOpen] = React.useState(false);
@@ -100,6 +101,8 @@ export default function Ejemplares() {
         { img: "https://via.placeholder.com/300.png/09f/fff" },
     ];
 
+    const sexoOptions = ["MACHO", "HEMBRA", "NO SEXADO"]
+    const especieOptions = ["ESPECIE1", "ESPECIE2", "ESPECIE3"]
     const AccordionSummary = styled((props) => (
         <MuiAccordionSummary
             expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
@@ -118,6 +121,11 @@ export default function Ejemplares() {
     const [openModal, setOpenModal] = React.useState(false);
     const handleOpen = () => setOpenModal(true);
     const handleClose = () => setOpenModal(false);
+
+    const [openModalEdit, setOpenModalEdit] = React.useState(false);
+    const handleOpenEdit = () => setOpenModalEdit(true);
+    const handleCloseEdit = () => setOpenModalEdit(false);
+
     return (
         <>
             <div style={{ margin: 20 }}>
@@ -170,7 +178,7 @@ export default function Ejemplares() {
                                     }}>
                                     Eliminar
                                 </Button>
-                                <Button variant="outlined" style={{ float: "right", marginRight: 10 }} startIcon={<ModeEditIcon />}>Editar</Button>
+                                <Button variant="outlined" style={{ float: "right", marginRight: 10 }} startIcon={<ModeEditIcon />} onClick={handleOpenEdit}>Editar</Button>
                             </>
                         }>
                             <Grid container spacing={2} direction={"row"}>
@@ -301,58 +309,230 @@ export default function Ejemplares() {
                         </MainCard>
                     </Grid>
                 </Grid>
-                <Modal
-                    aria-labelledby="transition-modal-title"
-                    aria-describedby="transition-modal-description"
-                    open={openModal}
-                    onClose={handleClose}
-                    closeAfterTransition
-                    slots={{ backdrop: Backdrop }}
-                    slotProps={{
-                        backdrop: {
-                            timeout: 500,
-                        },
+                <Formik
+                    initialValues={{
+                        title: '',
+                        date: '',
+                        note: ''
+                    }}
+                    onSubmit={async (values) => {
+                        console.log(values)
+                        await new Promise((r) => setTimeout(r, 500));
+                        console.log("funciona o me mato")
+                        // const token = Cookies.get('token');
+                        axios.post(baseURL,
+                            {
+                                "title": values.title,
+                                "date": values.date,
+                                "note": values.note,
+                            }, {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                                'Content-Type': 'application/json',
+                            }
+                        })
+                            .then((response) => {
+                                setPost(response.data);
+                            });
                     }}
                 >
-                    <Fade in={openModal}>
-                        <Box sx={style}>
-                            <Grid container spacing={2}>
-                                <Grid item lg={12} xs={12}>
-                                    <Typography variant="h6" component="h2">
-                                        Crear nota
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs={12} lg={6}>
-                                    <InputLabel style={{ fontSize: 12 }}>
-                                        Titulo
-                                    </InputLabel>
-                                    <TextField
-                                        fullWidth />
-                                </Grid>
-                                <Grid item xs={12} lg={6}>
-                                    <InputLabel style={{ fontSize: 12 }}>
-                                        Fecha
-                                    </InputLabel>
-                                    <TextField
-                                        defaultValue={new Date().toDateString()}
-                                        fullWidth />
-                                </Grid>
-                                <Grid item xs={12} lg={12}>
-                                    <InputLabel style={{ fontSize: 12 }}>
-                                        Nota
-                                    </InputLabel>
-                                    <TextField
-                                        fullWidth
-                                        multiline
-                                        />
-                                </Grid>
-                                <Grid item xs={12} lg={12}>
-                                    <Button fullWidth variant='outlined' onClick={handleClose}>guardar</Button>
-                                </Grid>
-                            </Grid>
-                        </Box>
-                    </Fade>
-                </Modal>
+                    {({ errors, handleBlur, handleChange, handleSubmit, values, setFieldValue }) => (
+                        <form onSubmit={handleSubmit}>
+                            <Modal
+                                aria-labelledby="transition-modal-title"
+                                aria-describedby="transition-modal-description"
+                                open={openModal}
+                                onClose={handleClose}
+                                closeAfterTransition
+                                slots={{ backdrop: Backdrop }}
+                                slotProps={{
+                                    backdrop: {
+                                        timeout: 500,
+                                    },
+                                }}
+                            >
+                                <Fade in={openModal}>
+                                    <Box sx={style}>
+                                        <Grid container spacing={2}>
+                                            <Grid item lg={12} xs={12}>
+                                                <Typography variant="h6" component="h2">
+                                                    Crear nota
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item xs={12} lg={6}>
+                                                <InputLabel style={{ fontSize: 12 }}>
+                                                    Titulo
+                                                </InputLabel>
+                                                <TextField
+                                                    id="title"
+                                                    required
+                                                    value={values.title}
+                                                    onChange={handleChange}
+                                                    fullWidth
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} lg={6}>
+                                                <InputLabel style={{ fontSize: 12 }}>
+                                                    Fecha
+                                                </InputLabel>
+                                                <TextField
+                                                    required
+                                                    id="date"
+                                                    type="date"
+                                                    value={values.date}
+                                                    onChange={handleChange}
+                                                    fullWidth />
+                                            </Grid>
+                                            <Grid item xs={12} lg={12}>
+                                                <InputLabel style={{ fontSize: 12 }}>
+                                                    Nota
+                                                </InputLabel>
+                                                <TextField
+                                                    id="note"
+                                                    required
+                                                    value={values.note}
+                                                    fullWidth
+                                                    multiline
+                                                    onChange={handleChange}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} lg={12}>
+                                                <Button fullWidth variant='outlined' onClick={handleClose} type="submit">guardar</Button>
+                                            </Grid>
+                                        </Grid>
+                                    </Box>
+                                </Fade>
+                            </Modal>
+                        </form>
+                    )}
+                </Formik>
+
+                <Formik
+                    initialValues={{
+                        specie: '',
+                        birthday: '',
+                        breedingPlace: '',
+                        gender: '',
+                        name: '',
+                        description: '',
+                    }}
+                    onSubmit={async (values) => {
+                        // const token = Cookies.get('token');
+                        axios.post(baseURL,
+                            {
+                                "specie": values.specie,
+                                "birthday": values.birthday,
+                                "breedingPlace": values.breedingPlace,
+                                "gender": values.gender,
+                                "name": values.name,
+                                "description": values.description,
+                            }, {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                                'Content-Type': 'application/json',
+                            }
+                        })
+                    }}
+                >
+                    {({ errors, handleBlur, handleChange, handleSubmit, values, setFieldValue }) => (
+                        <form onSubmit={handleSubmit}>
+                            <Modal
+                                aria-labelledby="transition-modal-title"
+                                aria-describedby="transition-modal-description"
+                                open={openModalEdit}
+                                onClose={handleCloseEdit}
+                                closeAfterTransition
+                                slots={{ backdrop: Backdrop }}
+                                slotProps={{
+                                    backdrop: {
+                                        timeout: 500,
+                                    },
+                                }}
+                            >
+                                <Fade in={openModalEdit}>
+                                    <Box sx={style}>
+                                        <Grid container spacing={2}>
+                                            <Grid item lg={12} xs={12}>
+                                                <Typography variant="h6" component="h2">
+                                                    Editar a <strong>{pacientes[0].nombre}</strong>
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item xs={12} lg={3}>
+                                                <InputLabel style={{ fontSize: 12 }}>
+                                                    Nombre
+                                                </InputLabel>
+                                                <TextField
+                                                    required
+                                                    value={values.name}
+                                                    fullWidth
+                                                    defaultValue={pacientes[0].nombre} />
+                                            </Grid>
+                                            <Grid item xs={12} lg={3}>
+                                                <InputLabel style={{ fontSize: 12 }}>
+                                                    Sexo
+                                                </InputLabel>
+                                                <Autocomplete
+                                                    disablePortal
+                                                    options={sexoOptions}
+                                                    required
+                                                    getOptionLabel={(option) => (typeof option === 'string' || option instanceof String ? option : '')}
+                                                    onChange={(e, value) => {
+                                                        console.log(value);
+                                                        setFieldValue('gender', value !== null ? value : values.gender);
+                                                    }}
+                                                    renderInput={(params) => <TextField {...params} />}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} lg={3}>
+                                                <InputLabel style={{ fontSize: 12 }}>
+                                                    Fecha de nacimiento
+                                                </InputLabel>
+                                                <TextField
+                                                    value={values.birthday}
+                                                    fullWidth
+                                                    required
+                                                    multiline
+                                                    defaultValue={pacientes[0].nacimiento}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} lg={3}>
+                                                <InputLabel style={{ fontSize: 12 }}>
+                                                    Especie
+                                                </InputLabel>
+                                                <Autocomplete
+                                                    disablePortal
+                                                    options={especieOptions}
+                                                    required
+                                                    getOptionLabel={(option) => (typeof option === 'string' || option instanceof String ? option : '')}
+                                                    onChange={(e, value) => {
+                                                        console.log(value);
+                                                        setFieldValue('especie', value !== null ? value : values.specie);
+                                                    }}
+                                                    renderInput={(params) => <TextField {...params} />}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} lg={12}>
+                                                <InputLabel style={{ fontSize: 12 }}>
+                                                    Descripción
+                                                </InputLabel>
+                                                <TextField
+                                                    value={values.description}
+                                                    fullWidth
+                                                    multiline
+                                                    required
+                                                    defaultValue={pacientes[0].descripcion}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} lg={12}>
+                                                <Button fullWidth variant='outlined' onClick={handleCloseEdit} type="sumbit">Actualizar</Button>
+                                            </Grid>
+                                        </Grid>
+                                    </Box>
+                                </Fade>
+                            </Modal>
+                        </form>
+                    )}
+                </Formik>
             </div>
         </>
     )

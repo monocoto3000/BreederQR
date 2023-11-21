@@ -18,6 +18,8 @@
     "@mui/x-charts": "^6.0.0-alpha.17",
     "@react-pdf/renderer": "^3.1.14",
     "apexcharts": "^3.44.0",
+    "axios": "^1.6.2",
+    "formik": "^2.4.5",
     "i": "^0.3.7",
     "lodash": "^4.17.21",
     "next": "13.5.6",
