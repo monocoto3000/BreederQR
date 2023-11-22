@@ -36,11 +36,11 @@ const pages = [
     href: "../Imagen",
   },
   {
-    nombrePage: "Galeria",
+    nombrePage: "Agregar ejemplar",
     href: "../form",
   },
   {
-    nombrePage: "Contactanos",
+    nombrePage: "Ejemplares",
     href: "../Ejemplares",
   },
   {
@@ -98,7 +98,7 @@ function Nav() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Grid container spacing={2}>
-            <Grid item xs={12} lg={1}>
+            <Grid item xs={12} lg={2}>
               <div
                 style={{
                   display: "flex",
@@ -129,7 +129,7 @@ function Nav() {
               </div>
             </Grid>
 
-            <Grid item xs={12} lg={10}>
+            <Grid item xs={12} lg={9}>
               <Grid Container spacing={2} className="nav">
                 {pages.map((page) => (
                   <Enlaces {...page} />

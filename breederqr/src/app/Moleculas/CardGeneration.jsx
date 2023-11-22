@@ -7,7 +7,8 @@ import React from 'react';
 import Cards from './Cards';
 import { Grid } from '@mui/material';
 
-export default function CardGeneration() {
+export default function CardGeneration(aux) {
+    console.log(aux)
     const pacientes = [
         {
             nombre: "pablo",

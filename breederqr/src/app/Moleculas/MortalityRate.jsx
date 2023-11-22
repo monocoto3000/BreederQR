@@ -1,6 +1,6 @@
 "use client"
 import PropTypes from 'prop-types';
-
+import MainCard from '../Components/ui-component/cards/MainCard';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import { styled, useTheme } from '@mui/material/styles';
@@ -84,9 +84,8 @@ export default function MortalityRate({ title, subheader, chart, ...other }) {
   });
 
   return (
-    <Card {...other}>
-      <CardHeader title={title} subheader={subheader} sx={{ mb: 5 }} />
-
+    <MainCard title="Taza de Nacimiento">
+      <CardHeader subheader={subheader}/>
       <StyledChart
         dir="ltr"
         type="pie"
@@ -95,7 +94,7 @@ export default function MortalityRate({ title, subheader, chart, ...other }) {
         width="100%"
         height={280}
       />
-    </Card>
+    </MainCard>
   );
 }
 
