@@ -13,14 +13,10 @@ import PetsRoundedIcon from '@mui/icons-material/PetsRounded';
 import config from '../../../config';
 import { useState } from 'react';
 
-export default function Cards(props) {
-  console.log(props.aux)
-  const handleClick = () => {
-    props.setAnimalId(props.aux.id);
-    window.location.href = '../Ejemplar';
-  };
+export default function Cards(aux) {
+  console.log(aux.aux)
   function colorCard() {
-    if (props.aux.gender === "H") {
+    if (aux.aux.gender === "H") {
       return "#fce4ec"
     } else {
       return "#c5cae9"
@@ -28,7 +24,7 @@ export default function Cards(props) {
   }
 
   function colorLineas() {
-    if (props.aux.gender === "H") {
+    if (aux.aux.gender === "H") {
       return "#ec407a"
     } else {
       return "#283593"
@@ -36,7 +32,7 @@ export default function Cards(props) {
   }
 
   function chipColor() {
-    if (props.aux.gender === "H") {
+    if (aux.aux.gender === "H") {
       return "rgba(236, 64, 122, 0.5)"
     } else {
       return "rgba(40, 53, 147, 0.5)"
@@ -74,26 +70,30 @@ export default function Cards(props) {
   }));
   return (
     <>
-      <CardStyle style={{ cursor: "pointer" }} onClick={handleClick}>
+      <CardStyle style={{ cursor: "pointer" }}
+        onClick={() => {
+          console.log(aux.aux.id)
+          window.location.href = '../Ejemplar'
+        }}>
         <CardContent>
           <Grid container>
             <Grid item lg={4}>
               <PetsRoundedIcon fontSize="large" style={{ width: "75%", height: "75%" }} />
             </Grid>
             <Grid item lg={4}>
-              <Typography variant="h6">{props.aux.name}</Typography>
+              <Typography variant="h6">{aux.aux.name}</Typography>
               <Typography variant="body2" color="grey.900" sx={{ opacity: 0.6 }}>
-                <a style={{ float: "left" }}>{props.aux.gender}</a> <br></br>
-                <a style={{ float: "left" }}>{props.aux.specie.name}</a> <br></br>
-                <a style={{ float: "left" }}>{props.aux.id}</a> <br></br>
+                <a style={{ float: "left" }}>{aux.aux.gender}</a> <br></br>
+                <a style={{ float: "left" }}>{aux.aux.specie.name}</a> <br></br>
+                <a style={{ float: "left" }}>{aux.aux.id}</a> <br></br>
               </Typography>
             </Grid>
             <Grid item lg={4}>
-              <Chip icon={<InsertInvitationRoundedIcon color='white' />} label={props.aux.birthday} size='small' variant='filled' style={{ backgroundColor: chipColor(), color: "white" }} />
+              <Chip icon={<InsertInvitationRoundedIcon color='white' />} label={aux.aux.birthday} size='small' variant='filled' style={{ backgroundColor: chipColor(), color: "white" }} />
             </Grid>
           </Grid>
           <Typography variant="caption" color="black">
-            <a style={{ float: "left", margin: "5px 0 5px 0" }}>{props.aux.description}</a> <br></br>
+            <a style={{ float: "left", margin: "5px 0 5px 0" }}>{aux.aux.description}</a> <br></br>
           </Typography>
         </CardContent>
       </CardStyle>

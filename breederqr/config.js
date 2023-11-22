@@ -6,7 +6,7 @@ module.exports = global.config = {
         id: 1
     },
     animal: {
-        id: 0
+        id: 2
     }
 };
 

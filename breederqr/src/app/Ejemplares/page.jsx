@@ -47,11 +47,6 @@ export default function Ejemplares() {
                 console.log(error)
             });
     }, []);
-    const handleSetAnimalId = (id) => {
-        config.animal.id = id;
-        window.location.href = '../Ejemplar';
-    };
-
     if (isLoading) {
         return <div className="App">Loading...</div>;
     }
@@ -102,7 +97,7 @@ export default function Ejemplares() {
                             return (
                                 <Grid item xs={12} lg={3}>
                                     <div key={index}>
-                                        <Cards aux={ejemplar} setAnimalId={handleSetAnimalId} />
+                                        <Cards aux={ejemplar} />
                                     </div>
                                 </Grid>
                             );
