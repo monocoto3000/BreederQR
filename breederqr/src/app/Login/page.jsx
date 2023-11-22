@@ -59,8 +59,7 @@ export default function page() {
             })
               .then((response) => {
                 const token = response.data.accessToken;
-            
-                config.auth.token = token
+  
                 if (response.data != "") {
                   Cookies.set('token', token);
                   window.location.href = "http://localhost:3000/";

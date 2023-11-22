@@ -1,20 +1,20 @@
 "use client"
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
-import { Card, Grid, Typography, CardContent } from '@mui/material';
+import { Card, Grid, Typography, CardContent, CardActionArea } from '@mui/material';
 import Chip from '@mui/material/Chip';
 import Icon from '../Atoms/Icon';
 import InsertInvitationRoundedIcon from '@mui/icons-material/InsertInvitationRounded';
 import PetsRoundedIcon from '@mui/icons-material/PetsRounded';
 import config from '../../../config';
 import { useState } from 'react';
+import Cookies from 'js-cookie';
 
 export default function Cards(aux) {
-  console.log(aux.aux)
+  console.log(aux)
+  const handleClick = () => {
+    window.location.href = '../Ejemplar';
+  };
   function colorCard() {
     if (aux.aux.gender === "H") {
       return "#fce4ec"
@@ -70,12 +70,14 @@ export default function Cards(aux) {
   }));
   return (
     <>
-      <CardStyle style={{ cursor: "pointer" }}
+      <CardStyle  style={{ cursor: "pointer" }}
         onClick={() => {
-          console.log(aux.aux.id)
-          window.location.href = '../Ejemplar'
+          console.log(aux.aux)
+          Cookies.set('animalId', aux.aux.id);
+
         }}>
-        <CardContent>
+          <CardActionArea href="/Ejemplar">
+          <CardContent  >
           <Grid container>
             <Grid item lg={4}>
               <PetsRoundedIcon fontSize="large" style={{ width: "75%", height: "75%" }} />
@@ -96,6 +98,7 @@ export default function Cards(aux) {
             <a style={{ float: "left", margin: "5px 0 5px 0" }}>{aux.aux.description}</a> <br></br>
           </Typography>
         </CardContent>
+          </CardActionArea>
       </CardStyle>
     </>
   )
