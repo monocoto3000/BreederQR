@@ -37,9 +37,15 @@ import "../Components/Anexos.css"
 import config from "../../../config";
 import { useEffect } from "react";
 import axios from "axios";
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+
 export default function Ejemplares() {
     const token = config.auth.token
-    const softDeleteAnimalURL= "http://localhost:8080/animal/deleteAnimal"
+    const softDeleteAnimalURL = "http://localhost:8080/animal/deleteAnimal"
 
     const [open, setOpen] = React.useState(false);
     const [expanded, setExpanded] = React.useState(false);
@@ -73,8 +79,9 @@ export default function Ejemplares() {
         )
     }
 
-    const [animal, setAnimal] = useState(null)
     const getAnimalUrl = "http://localhost:8080/animal/getAnimalById?id=1"
+    const [animal, setAnimal] = useState(null)
+    const [isLoading, setLoading] = useState(true);
     useEffect(() => {
         axios.get(getAnimalUrl, {
             headers: {
@@ -83,10 +90,26 @@ export default function Ejemplares() {
             params: {
                 "id": 1
             }
+        }).then(response => {
+            setAnimal(response.data);
+            setLoading(false);
         })
-            .then(response => {
-                setAnimal(response?.data);
-            })
+            .catch(error => {
+                console.log(error)
+            });
+    }, []);
+
+    const imagesURL = "http://localhost:8080/photo/getPhoto?idBreedingPace=1"
+    const [imgage, setImage] = useState(null)
+    useEffect(() => {
+        axios.get(imagesURL, {
+            params: {
+                "idBreedingPace": 1
+            }
+        }).then(response => {
+            setImage(response.data);
+            setLoading(false);
+        })
             .catch(error => {
                 console.log(error)
             });
@@ -132,8 +155,8 @@ export default function Ejemplares() {
         { img: "https://via.placeholder.com/300.png/09f/fff" },
     ];
 
-    const sexoOptions = ["MACHO", "HEMBRA", "NO SEXADO"]
-    const especieOptions = ["GECKO", "CABALLO", "VACA"]
+    const sexoOptions = [{ label: "MACHO", id: 1 }, { label: "HEMBRA", id: 2 }, { label: "NO SEXADO", id: 3 }]
+    const especieOptions = [{ label: "GECKO", id: 1 }, { label: "CABALLO", id: 2 }, { label: "VACA", id: 3 }]
 
     const AccordionSummary = styled((props) => (
         <MuiAccordionSummary
@@ -227,7 +250,11 @@ export default function Ejemplares() {
             // alert('No');
         }
     }
+    const putAnimal = "http://localhost:8080/animal/putAnimal"
     console.log(selectedfile)
+    if (isLoading) {
+        return <div className="App">Loading...</div>;
+    }
     return (
         <>
             <div style={{ margin: 20 }}>
@@ -249,7 +276,7 @@ export default function Ejemplares() {
                             }
                         >
                             <Typography variant="caption" fontSize={18}>
-                                <AlertTitle><strong>¿Desea eliminar al ejemplar {pacientes[0].nombre}?</strong></AlertTitle>
+                                <AlertTitle><strong>¿Desea eliminar al ejemplar {animal.name}?</strong></AlertTitle>
                             </Typography>
                             <Typography variant="caption" fontSize={15}>
                                 Para continuar presione <strong>ELIMINAR</strong>
@@ -269,7 +296,7 @@ export default function Ejemplares() {
                     <Grid item xs={12} lg={6}>
                         <MainCard title={
                             <>
-                                {pacientes[0].nombre}
+                                {animal.name}
                                 <Button
                                     variant="outlined"
                                     color="error"
@@ -288,7 +315,7 @@ export default function Ejemplares() {
                                     <div style={{ textAlign: "center" }}>
                                         <img
                                             style={{ borderRadius: "100%", width: 180, height: 180 }}
-                                            src={pacientes[0].img}
+                                            src={animal.birthday}
                                             alt="new"
                                         />
                                     </div>
@@ -296,17 +323,20 @@ export default function Ejemplares() {
                                 <Grid item xs={12} lg={8}>
                                     <Chip label={
                                         <Typography variant="subtitle1">
-                                            <b>{pacientes[0].nacimiento}</b>
+                                            <b>{animal.birthday}</b>
                                         </Typography>
                                     } variant="outlined" style={{ float: "right" }} />
                                     <Typography variant="h5" gutterBottom>
-                                        <b>Sexo:</b> {pacientes[0].sexo}
+                                        <b>Sexo:</b> {animal.gender}
                                     </Typography>
                                     <Typography variant="h5" gutterBottom>
-                                        <b>Edad:</b> {pacientes[0].edad} Años
+                                        <b>Número de Registro:</b> {animal.register_number}
                                     </Typography>
                                     <Typography variant="h5" gutterBottom>
-                                        <b>Especie:</b> {pacientes[0].especie}
+                                        <b>Especie:</b> {animal.specie.name}
+                                    </Typography>
+                                    <Typography variant="subtitle1" gutterBottom>
+                                        <b>Fecha de registro:</b> {animal.createdAt}
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -355,7 +385,7 @@ export default function Ejemplares() {
                                     Descripción
                                 </Typography>
                                 <Typography variant="subtitle1" gutterBottom>
-                                    {pacientes[0].descripcion}
+                                    {animal.description}
                                 </Typography>
                                 <PDFDownloadLink document={<QR />} fileName={pacientes[0].nombre + "_qr"}>
                                     {({ loading }) => (loading ? <Button variant="outlined"><CircularProgress />Generando QR</Button> : <Button variant="outlined">Generar QR</Button>)}
@@ -409,11 +439,11 @@ export default function Ejemplares() {
                             </>
                         }>
                             <Grid container direction="row" spacing={1}>
-                                {imagenes.map((imagen) => (
+                                {imgage?.map((imagen) => (
                                     <Grid item xs md lg={2}>
                                         <img
                                             style={{ borderRadius: 10, width: 100, height: 100 }}
-                                            src={imagen.img}
+                                            src={imagen.url}
                                             alt="new"
                                         />
                                     </Grid>
@@ -522,32 +552,32 @@ export default function Ejemplares() {
 
                 <Formik
                     initialValues={{
-                        specie: '',
-                        birthday: '',
-                        breedingPlace: '',
-                        gender: '',
-                        name: '',
-                        description: '',
-                        registerNumber: '',
-                        token: ''
+                        specie: animal.specie.id,
+                        birthday: animal.birthday,
+                        breedingPlace: animal.breedingPlace.id,
+                        gender: animal.gender,
+                        name: animal.name,
+                        description: animal.description,
+                        register_number: animal.register_number,
+                        token: token
                     }}
                     onSubmit={async (values) => {
-                        axios.post(postPhotoURL,
-                            {
-                                "specie": values.specie,
-                                "breedingPlace": values.breedingPlace,
-                                "birthday": values.birthday,
-                                "gender": values.gender,
-                                "name": values.name,
-                                "description": values.description,
-                                "registerNumber": values.registerNumber,
-                                "token": token
-                            }, {
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                                'Content-Type': 'application/json',
-                            }
-                        })
+                        try {
+                            axios.put(putAnimal, {
+                                specie: values.specie,
+                                breedingPlace: values.breedingPlace,
+                                birthday: values.birthday,
+                                gender: values.gender,
+                                name: values.name,
+                                description: values.description,
+                                register_number: values.register_number,
+                                token: token
+                            }).then(Response);
+                            console.log("Ejemplar actualizado exitosamente")
+                        } catch (error) {
+                            console.log("Hubo un error al actualizar al ejemplar")
+                            console.error(error);
+                        }
                     }}
                 >
                     {({ errors, handleBlur, handleChange, handleSubmit, values, setFieldValue }) => (
@@ -570,7 +600,7 @@ export default function Ejemplares() {
                                         <Grid container spacing={2}>
                                             <Grid item lg={12} xs={12}>
                                                 <Typography variant="h6" component="h2">
-                                                    Editar a <strong>{pacientes[0].nombre}</strong>
+                                                    Editar a <strong>{animal.name}</strong>
                                                 </Typography>
                                             </Grid>
                                             <Grid item xs={12} lg={6}>
@@ -578,37 +608,41 @@ export default function Ejemplares() {
                                                     Nombre
                                                 </InputLabel>
                                                 <TextField
+                                                    id="name"
                                                     required
                                                     value={values.name}
                                                     fullWidth
-                                                    defaultValue={pacientes[0].nombre} />
+                                                    onChange={handleChange}
+                                                />
                                             </Grid>
                                             <Grid item xs={12} lg={6}>
                                                 <InputLabel style={{ fontSize: 12 }}>
                                                     Número de registro
                                                 </InputLabel>
                                                 <TextField
+                                                    id="register_number"
                                                     required
-                                                    value={values.registerNumber}
+                                                    onChange={handleChange}
+                                                    value={values.register_number}
                                                     fullWidth
-                                                    defaultValue={pacientes[0].nombre} />
+                                                />
                                             </Grid>
                                             <Grid item xs={12} lg={6}>
-                                                <InputLabel style={{ fontSize: 12 }}>
-                                                    Sexo
-                                                </InputLabel>
-                                                <Autocomplete
-                                                    disablePortal
-                                                    options={sexoOptions}
-                                                    required
-                                                    getOptionLabel={(option) => (typeof option === 'string' || option instanceof String ? option : '')}
-                                                    onChange={(e, value) => {
-                                                        console.log(value);
-                                                        setFieldValue('gender', value !== null ? value : values.gender);
-                                                    }}
-                                                    value={values.gender}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
+                                                <FormControl>
+                                                    <FormLabel id="demo-radio-buttons-group-label">Sexo</FormLabel>
+                                                    <RadioGroup
+                                                        aria-labelledby="demo-radio-buttons-group-label"
+                                                        defaultValue={1}
+                                                        id="gender"
+                                                        name="radio-buttons-group"
+                                                        row
+                                                        value={values.gender}
+                                                    >
+                                                        <FormControlLabel control={<Radio />} label="MACHO" value={1} />
+                                                        <FormControlLabel control={<Radio />} label="HEMBRA" value={2} />
+                                                        <FormControlLabel control={<Radio />} label="NO SEXADO" value={3} />
+                                                    </RadioGroup>
+                                                </FormControl>
                                             </Grid>
                                             <Grid item xs={12} lg={3}>
                                                 <InputLabel style={{ fontSize: 12 }}>
@@ -619,25 +653,26 @@ export default function Ejemplares() {
                                                     value={values.birthday}
                                                     fullWidth
                                                     required
-                                                    defaultValue={pacientes[0].nacimiento}
+                                                    onChange={handleChange}
+                                                    id="birthday"
                                                 />
                                             </Grid>
                                             <Grid item xs={12} lg={3}>
-                                                <InputLabel style={{ fontSize: 12 }}>
-                                                    Especie
-                                                </InputLabel>
-                                                <Autocomplete
-                                                    disablePortal
-                                                    value={values.specie}
-                                                    options={especieOptions}
-                                                    required
-                                                    getOptionLabel={(option) => (typeof option === 'string' || option instanceof String ? option : '')}
-                                                    onChange={(e, value) => {
-                                                        console.log(value);
-                                                        setFieldValue('especie', value !== null ? value : values.specie);
-                                                    }}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
+                                                <FormControl>
+                                                    <FormLabel id="demo-radio-buttons-group-label">Especie</FormLabel>
+                                                    <RadioGroup
+                                                        id="specie"
+                                                        value={values.specie}
+                                                        aria-labelledby="demo-radio-buttons-group-label"
+                                                        defaultValue={1}
+                                                        name="radio-buttons-group"
+                                                        row
+                                                    >
+                                                        <FormControlLabel control={<Radio />} label="GECKO" value={1} />
+                                                        <FormControlLabel control={<Radio />} label="CABALLO" value={2} />
+                                                        <FormControlLabel control={<Radio />} label="VACA" value={3} />
+                                                    </RadioGroup>
+                                                </FormControl>
                                             </Grid>
                                             <Grid item xs={12} lg={12}>
                                                 <InputLabel style={{ fontSize: 12 }}>
@@ -648,7 +683,8 @@ export default function Ejemplares() {
                                                     fullWidth
                                                     multiline
                                                     required
-                                                    defaultValue={pacientes[0].descripcion}
+                                                    id="description"
+                                                    onChange={handleChange}
                                                 />
                                             </Grid>
                                             <Grid item xs={12} lg={12}>
@@ -674,12 +710,8 @@ export default function Ejemplares() {
                                 "idAnimal": values.specie,
                                 "photo": selectedfile,
                                 "token": token
-                            }, {
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                                'Content-Type': 'application/json',
                             }
-                        })
+                        )
                     }}
                 >
                     {({ errors, handleBlur, handleChange, handleSubmit, values, setFieldValue }) => (

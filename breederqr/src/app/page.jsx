@@ -22,15 +22,12 @@ import axios from "axios";
 
 const baseURL = "http://localhost:8080/breedingPlace/getBreedingPlace"
 const token = config.auth.token
-
 export default function Home() {
   const [criadero, setCriaderos] = useState(null)
   const [isLoading, setLoading] = useState(true);
-
   useEffect(() => {
     axios.get(baseURL, {
       headers: {
-        Authorization: `Bearer ${token}`,
         Authorization: `Bearer ${token}`,
       },
       params: {
@@ -43,7 +40,6 @@ export default function Home() {
       .catch(error => {
         console.log(error)
       });
-
   }, []);
   
   const style = {
@@ -64,7 +60,6 @@ export default function Home() {
   if (isLoading) {
     return <div className="App">Loading...</div>;
   }
-
   return (
     <div style={{ margin: 15 }}>
       <Grid container direction="row" spacing={2}>
@@ -85,7 +80,7 @@ export default function Home() {
         <Grid item lg={4} xs={12}>
           <MainCard title={
             <>
-              Criaderos
+              Criadero
             </>
           }>
             <Grid container spacing={2} direction="column">
