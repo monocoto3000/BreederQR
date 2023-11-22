@@ -16,31 +16,30 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useState, useEffect } from "react";
 import axios from "axios";
-import "/config"
+import config from "../../../config";
 
 export default function Ejemplares() {
     const [age, setAge] = React.useState('');
     const handleChange = (event) => {
         setAge(event.target.value);
     };
-    const [ejemplar, setEjemplar] = useState(null);
-    const token = global.config.auth.token
+    const baseURL = "http://localhost:8080/animal/getAllAnimals"
+    const token = config.auth.token
+    console.log(token)
+    const [ejemplares, setEjemplares] = useState(null);
     useEffect(() => {
         axios.get(baseURL, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
             params: {
-                "id": 1
+                "token": token
             }
         }).then(response => {
-            setEjemplar(response?.data);
+            setEjemplares(response?.data);
         })
             .catch(error => {
                 console.log(error)
             });
     }, []);
-    const baseURL = `http://localhost:8080/animal/getAllAnimals`;
+    console.log(ejemplares)
     return (
         <>
             <div style={{ margin: 20 }}>
@@ -84,7 +83,15 @@ export default function Ejemplares() {
                         <Grid item xs={12} lg={1}>
                             <Button variant="contained" size="large" style={{ backgroundColor: "#564E58" }} fullWidth>Aplicar</Button>
                         </Grid>
-                        <CardGeneration aux={ejemplar}/>
+                        {ejemplares.map((ejemplar, index) => {
+                            return (
+                                <Grid item xs={12} lg={3}>
+                                    <div key={index}>
+                                        <Cards aux={ejemplar} />
+                                    </div>
+                                </Grid>
+                            );
+                        })}
                     </Grid>
                 </MainCard>
             </div >
