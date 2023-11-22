@@ -24,6 +24,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Formik } from "formik";
 import { values } from "lodash";
+import Cookies from 'js-cookie';
 
 export default function form() {
   const ColorButton = styled(Button)(({ theme }) => ({
@@ -58,11 +59,14 @@ export default function form() {
           try {
             console.log(values);
             const token = Cookies.get("token");
+            const breedingPlace = Cookies.get("breedingPlace");
+          
+
             axios
               .post("http://localhost:8080/animal/postAnimal", {
-                specie: values.specie,
+                specie: 1,
                 birthday: values.birthday,
-                breedingPlace: values.breedingPlace,
+                breedingPlace: breedingPlace,
                 gender: values.gender,
                 name: values.name,
                 registerNumber: values.registerNumber,
@@ -71,11 +75,10 @@ export default function form() {
               })
               .then((response) => {
                 console.log(response);
-                const expires = response.headers["expires"];
-                Cookies.set("token", token, { expires: new Date(expires) });
+                alert("creado");
               });
           } catch (error) {
-            console.error(err);
+            console.error(error);
             if (scriptedRef.current) {
               setStatus({ success: false });
               setErrors({ submit: err.message });
@@ -212,7 +215,6 @@ export default function form() {
                               fullWidth
                               id="birthday"
                               type="date"
-                              multiline
                               required
                               value={values.birthday}
                               onChange={handleChange}

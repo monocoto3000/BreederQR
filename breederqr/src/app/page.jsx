@@ -19,6 +19,7 @@ import TextField from '@mui/material/TextField';
 import config from "../../config";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Cookies from 'js-cookie';
 
 const baseURL = "http://localhost:8080/breedingPlace/getBreedingPlace"
 const token = config.auth.token
@@ -35,7 +36,10 @@ export default function Home() {
       }
     }).then(response => {
       setCriaderos(response.data);
+      console.log(response.data);
       setLoading(false);
+      Cookies.set('breedingPlace', response.data.id);
+
     })
       .catch(error => {
         console.log(error)
