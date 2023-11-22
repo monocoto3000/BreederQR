@@ -28,6 +28,9 @@ export default function Home() {
   const [criadero, setCriadero] = useState(null)
   useEffect(() => {
     axios.get(baseURL, {
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxLHVzZXJAZ21haWwuY29tIiwiaXNzIjoiQnJlZWRlclFSIiwiaWF0IjoxNzAwNjI1MDUzLCJleHAiOjE3MDA3MTE0NTN9.nArL7GCeraTNdwwWiRrCS6LkX_AOZtJ9z3XcUH0iQjx-Cm4swFcj3WRs8cV33qo5mtbeJBEI6HYhm9OzmdYaGg`,
+      },
       params: {
         "token": token
       }
@@ -114,7 +117,7 @@ export default function Home() {
                         <Grid item xs={12} lg={12}>
                           <CardContent>
                             <Typography variant="caption" color="text.secondary" component="div">
-                              <strong>Descripción</strong><br></br>
+                              <strong>DescripciÃ³n</strong><br></br>
                               {criadero.description}
                             </Typography>
                           </CardContent>
