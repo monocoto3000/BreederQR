@@ -19,20 +19,30 @@ import TextField from '@mui/material/TextField';
 import config from "../../config";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import fetch from 'node-fetch';
+import Anexos from "./Components/Anexos";
 
 const baseURL = "http://localhost:8080/breedingPlace/getBreedingPlace"
 const token = config.auth.token
-const body = {"token": token};
-const response = await fetch(baseURL, {
-	method: 'post',
-	body: JSON.stringify(body),
-	headers: {'Content-Type': 'application/json'}
-});
-const data = await response.json();
-console.log(data);
 
 export default function Home() {
+  const [criadero, setCriadero] = useState(null)
+  useEffect(() => {
+    axios.get(baseURL, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        "token": token
+      }
+    }).then(response => {
+      setCriadero(response?.data);
+    })
+      .catch(error => {
+        console.log(error)
+      });
+  }, []);
+
+  console.log(criadero)
   const style = {
     position: 'absolute',
     top: '50%',
@@ -43,9 +53,6 @@ export default function Home() {
     boxShadow: 24,
     p: 4,
   };
-  const [openModal, setOpenModal] = React.useState(false);
-  const handleOpen = () => setOpenModal(true);
-  const handleClose = () => setOpenModal(false);
   const [openModalEdit, setOpenModalEdit] = React.useState(false);
   const handleOpenEdit = () => setOpenModalEdit(true);
   const handleCloseEdit = () => setOpenModalEdit(false);
@@ -67,18 +74,7 @@ export default function Home() {
           <SalesRate />
         </Grid>
         <Grid item lg={4} xs={12}>
-          <MainCard title={
-            <>
-              Criaderos
-              <Button
-                variant="outlined"
-                style={{ float: "right", marginRight: 10 }}
-                startIcon={<AddCircleOutlineIcon />}
-                onClick={handleOpen}>
-                Agregar
-              </Button>
-            </>
-          }>
+          <MainCard title="Criadero">
             <Grid container spacing={2} direction="column">
               <Grid item lg={4}>
                 {/* <Card>
@@ -134,144 +130,6 @@ export default function Home() {
           </MainCard>
         </Grid>
       </Grid>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={openModal}
-        onClose={handleClose}
-        closeAfterTransition
-        slots={{ backdrop: Backdrop }}
-        slotProps={{
-          backdrop: {
-            timeout: 500,
-          },
-        }}
-      >
-        <Fade in={openModal}>
-          <Box sx={style}>
-            <Grid container spacing={2}>
-              <Grid item lg={12} xs={12}>
-                <Typography variant="h6" component="h2">
-                  Crear criadero
-                </Typography>
-              </Grid>
-              <Grid item xs={12} lg={6}>
-                <InputLabel style={{ fontSize: 12 }}>
-                  Nombre
-                </InputLabel>
-                <TextField
-                  fullWidth />
-              </Grid>
-              <Grid item xs={12} lg={6}>
-                <InputLabel style={{ fontSize: 12 }}>
-                  Dirección
-                </InputLabel>
-                <TextField
-                  fullWidth />
-              </Grid>
-              <Grid item xs={12} lg={6}>
-                <InputLabel style={{ fontSize: 12 }}>
-                  Registro
-                </InputLabel>
-                <TextField
-                  fullWidth
-                  multiline
-                />
-              </Grid>
-              <Grid item xs={12} lg={6}>
-                <InputLabel style={{ fontSize: 12 }}>
-                  Logo
-                </InputLabel>
-                <TextField
-                  fullWidth
-                  multiline
-                />
-              </Grid>
-              <Grid item xs={12} lg={12}>
-                <InputLabel style={{ fontSize: 12 }}>
-                  Descripción
-                </InputLabel>
-                <TextField
-                  fullWidth
-                  multiline
-                />
-              </Grid>
-              <Grid item xs={12} lg={12}>
-                <Button fullWidth variant='outlined' onClick={handleClose}>guardar</Button>
-              </Grid>
-            </Grid>
-          </Box>
-        </Fade>
-      </Modal>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={openModalEdit}
-        onClose={handleCloseEdit}
-        closeAfterTransition
-        slots={{ backdrop: Backdrop }}
-        slotProps={{
-          backdrop: {
-            timeout: 500,
-          },
-        }}
-      >
-        <Fade in={openModalEdit}>
-          <Box sx={style}>
-            <Grid container spacing={2}>
-              <Grid item lg={12} xs={12}>
-                <Typography variant="h6" component="h2">
-                  Crear criadero
-                </Typography>
-              </Grid>
-              <Grid item xs={12} lg={6}>
-                <InputLabel style={{ fontSize: 12 }}>
-                  Nombre
-                </InputLabel>
-                <TextField
-                  fullWidth />
-              </Grid>
-              <Grid item xs={12} lg={6}>
-                <InputLabel style={{ fontSize: 12 }}>
-                  Dirección
-                </InputLabel>
-                <TextField
-                  fullWidth />
-              </Grid>
-              <Grid item xs={12} lg={6}>
-                <InputLabel style={{ fontSize: 12 }}>
-                  Registro
-                </InputLabel>
-                <TextField
-                  fullWidth
-                  multiline
-                />
-              </Grid>
-              <Grid item xs={12} lg={6}>
-                <InputLabel style={{ fontSize: 12 }}>
-                  Logo
-                </InputLabel>
-                <TextField
-                  fullWidth
-                  multiline
-                />
-              </Grid>
-              <Grid item xs={12} lg={12}>
-                <InputLabel style={{ fontSize: 12 }}>
-                  Descripción
-                </InputLabel>
-                <TextField
-                  fullWidth
-                  multiline
-                />
-              </Grid>
-              <Grid item xs={12} lg={12}>
-                <Button fullWidth variant='outlined' onClick={handleCloseEdit}>Actulizar</Button>
-              </Grid>
-            </Grid>
-          </Box>
-        </Fade>
-      </Modal>
     </div>
   );
 }
