@@ -4,7 +4,7 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import { Button, Grid, TextField, Typography, Box } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import { styled } from "@mui/material/styles";
@@ -21,6 +21,7 @@ import { Formik } from "formik";
 import { values } from "lodash";
 
 import "../../css/form.css";
+import { useHref } from "react-router-dom";
 
 export default function Page() {
   const ColorButton = styled(Button)(({ theme }) => ({
@@ -41,42 +42,64 @@ export default function Page() {
     <>
       <Formik
         initialValues={{
-          username: '',
-          password: '',
-          mail: '',
-          name: '',
-          last_name: '',
-          second_last_name : '',
-
+          username: "",
+          password: "",
+          mail: "",
+          name: "",
+          last_name: "",
+          second_last_name: "",
         }}
+ 
         onSubmit={async (values) => {
-          console.log("funciona pa");
-          const token = Cookies.get("token");
-          axios.post(baseUrl, {
-            "username": values.username,
-            "password": values.password,
-            "mail": values.mail,
-            "name": values.name,
-            "last_name": values.last_name,
-            "second_last_name" : values.second_last_name,          
+          try {
+            console.log("funciona pa");
+            const token = Cookies.get("token");
+            axios
+              .post(baseUrl, {
+                username: values.username,
+                password: values.password,
+                mail: values.mail,
+                name: values.name,
+                last_name: values.last_name,
+                second_last_name: values.second_last_name,
+              })
+              .then((response) => {
+                console.log(response);
+                const token = response.data.password;
+                const expires = response.headers["expires"];
+                Cookies.set("token", token, { expires: new Date(expires) });
+                if (response.data != "") {
+                  setStatus({ success: true });
+                  setSubmitting(true);
+                  window.location.href = "http://localhost:3000/Login";
+                } else {
+                  setStatus({ success: false });
+                  setErrors({ submit: "El usuario NO fue creado" });
+                  setSubmitting(false);
+                }
+              });
+          } catch (error) {
+            console.error(err);
+            if (scriptedRef.current) {
+              setStatus({ success: false });
+              setErrors({ submit: err.message });
+              setSubmitting(false);
+            }
           }
-          );
         }}
       >
         {({ errors, handleBlur, handleChange, handleSubmit, values }) => (
           <form
             style={{
-              margin: 20,
-              height: "100%",
+              margin: 20
             }}
-              onSubmit={handleSubmit}
+            onSubmit={handleSubmit}
           >
             <Grid
               container
               spacing={0}
               sx={{
                 justifyContent: "center",
-                height: "100%",
               }}
             >
               <div
@@ -93,7 +116,7 @@ export default function Page() {
                   marginTop: "30px",
                 }}
               >
-                <div className="containerLogin">
+                <div className="containerRegister">
                   <div className="padreImg">
                     <div className="containerImgLogin"></div>
                   </div>
@@ -209,6 +232,39 @@ export default function Page() {
                           Contraseña
                         </InputLabel>
                       </Grid>
+                          
+                          <Grid item xs={12} sx={{
+                            color:"black"
+                          }}>
+                            <Typography>Agregar Criadero</Typography>
+                          </Grid>
+              
+                          <Grid item xs={12} lg={6}>
+                            <InputLabel style={{ fontSize: 12 }}>
+                              Nombre 
+                            </InputLabel>
+                            <TextField fullWidth />
+                          </Grid>
+                          <Grid item xs={12} lg={6}>
+                            <InputLabel style={{ fontSize: 12 }}>
+                              Dirección
+                            </InputLabel>
+                            <TextField fullWidth />
+                          </Grid>
+                          <Grid item xs={12} lg={6}>
+                            <InputLabel style={{ fontSize: 12 }}>
+                              Registro
+                            </InputLabel>
+                            <TextField fullWidth multiline />
+                          </Grid>
+                          
+                          <Grid item xs={12} lg={6}>
+                            <InputLabel style={{ fontSize: 12 }}>
+                              Descripción
+                            </InputLabel>
+                            <TextField fullWidth multiline />
+                          </Grid>
+                          
                     </Grid>
                     <div
                       style={{
@@ -216,12 +272,16 @@ export default function Page() {
                       }}
                     >
                       <Stack spacing={2} direction="row">
-                        <ColorButton variant="contained" type="submit">Ingresar</ColorButton>
+                        <ColorButton variant="contained" type="submit">
+                          Ingresar
+                        </ColorButton>
                       </Stack>
                     </div>
                   </div>
                 </div>
               </div>
+
+
             </Grid>
           </form>
         )}
@@ -229,3 +289,5 @@ export default function Page() {
     </>
   );
 }
+
+

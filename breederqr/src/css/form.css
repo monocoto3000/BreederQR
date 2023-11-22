@@ -52,10 +52,28 @@ border-radius: 100px;
     }
 }
 
-.containerImgLogin {
-    
-   
+.containerRegister{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    width: 100%;
+    height: 1450px;
+    border-radius: 5px;
+}
 
+@media (min-width: 768px) {
+    .containerRegister{
+        flex-direction: row;
+        width: 100%;
+        height: 800px;
+        align-content: center;
+    }
+}
+
+.containerImgLogin {
     width: 100%;
     height: 100%;
 }
@@ -110,7 +128,7 @@ border-radius: 100px;
     .containerFormRegister{
         margin-top: 25px;
         margin-left: 2px;
-        height: 400px;
+        height: 700px;
     }
 }
 
