@@ -155,9 +155,6 @@ export default function Ejemplares() {
         { img: "https://via.placeholder.com/300.png/09f/fff" },
     ];
 
-    const sexoOptions = [{ label: "MACHO", id: 1 }, { label: "HEMBRA", id: 2 }, { label: "NO SEXADO", id: 3 }]
-    const especieOptions = [{ label: "GECKO", id: 1 }, { label: "CABALLO", id: 2 }, { label: "VACA", id: 3 }]
-
     const AccordionSummary = styled((props) => (
         <MuiAccordionSummary
             expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
@@ -638,9 +635,9 @@ export default function Ejemplares() {
                                                         row
                                                         value={values.gender}
                                                     >
-                                                        <FormControlLabel control={<Radio />} label="MACHO" value={1} />
-                                                        <FormControlLabel control={<Radio />} label="HEMBRA" value={2} />
-                                                        <FormControlLabel control={<Radio />} label="NO SEXADO" value={3} />
+                                                        <FormControlLabel control={<Radio />} label="MACHO" value="M" />
+                                                        <FormControlLabel control={<Radio />} label="HEMBRA" value="H" />
+                                                        <FormControlLabel control={<Radio />} label="NO SEXADO" value="I" />
                                                     </RadioGroup>
                                                 </FormControl>
                                             </Grid>
