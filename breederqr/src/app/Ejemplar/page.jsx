@@ -42,6 +42,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import image from "/Users/Mon/Desktop/BreederQrBack/BreederQr/src/main/resources/files/animals/PEdrito-QRCODE.png"
 
 export default function Ejemplares() {
     const token = config.auth.token
@@ -74,13 +75,6 @@ export default function Ejemplares() {
     const handleAcordion = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
-    const styles = ({
-        body: {
-            paddingTop: 35,
-            paddingBottom: 65,
-            paddingHorizontal: 35,
-        }
-    });
     const style = {
         position: 'absolute',
         top: '50%',
@@ -91,15 +85,6 @@ export default function Ejemplares() {
         boxShadow: 24,
         p: 4,
     };
-    const QR = () => {
-        return (
-            <Document>
-                <Page wrap style={styles.body}>
-                    <Text>soy un qr</Text>
-                </Page>
-            </Document>
-        )
-    }
 
     const getAnimalUrl = `http://localhost:8080/animal/getAnimalById`
     const [animal, setAnimal] = useState(null)
@@ -121,6 +106,33 @@ export default function Ejemplares() {
             });
     }, []);
 
+    const styles = ({
+        body: {
+            paddingTop: 35,
+            paddingBottom: 65,
+            paddingHorizontal: 35,
+        },
+        image: {
+            marginVertical: 15,
+            marginHorizontal: 100,
+        },
+        title: {
+            fontSize: 24,
+            textAlign: 'center',
+        }
+    });
+    const QR = () => {
+        return (
+            <Document>
+                <Page wrap style={styles.body}>
+                    <Text style={styles.title}>{animal.register_number}</Text>
+                    <Image
+                        style={styles.image}
+                        src={image}/>
+                </Page>
+            </Document>
+        )
+    }
     const imagesURL = "http://localhost:8080/photo/getPhoto?idBreedingPace=1"
     const [imgage, setImage] = useState(null)
     useEffect(() => {
@@ -138,17 +150,6 @@ export default function Ejemplares() {
     }, []);
 
     const postPhotoURL = "http://localhost:8080/photo/postPhoto"
-    const pacientes = [
-        {
-            nombre: "Gecko3000",
-            edad: 8,
-            sexo: "H",
-            nacimiento: "12/42/2004",
-            especie: "Gecko amarillo",
-            img: "https://via.placeholder.com/300.png/09f/fff",
-            descripcion: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sed nisi nunc. Integer nec turpis in urna eleifend imperdiet nec in augue. Curabitur dignissim sodales augue"
-        }]
-
 
     const cardData = [
         { id: 1, nombre: 'Felipe', sexo: "H", nacimiento: "12/42/2004", img: "https://via.placeholder.com/300.png/09f/fff", especie: "Astrolopitecus", parentesco: "Mamá" },
@@ -272,7 +273,6 @@ export default function Ejemplares() {
     }
     const putAnimal = "http://localhost:8080/animal/putAnimal"
     console.log(selectedfile)
-    
     if (isLoading) {
         return <div className="App">Loading...</div>;
     }
@@ -408,7 +408,7 @@ export default function Ejemplares() {
                                 <Typography variant="subtitle1" gutterBottom>
                                     {animal.description}
                                 </Typography>
-                                <PDFDownloadLink document={<QR />} fileName={pacientes[0].nombre + "_qr"}>
+                                <PDFDownloadLink document={<QR />} fileName={animal.name + "_qr"}>
                                     {({ loading }) => (loading ? <Button variant="outlined"><CircularProgress />Generando QR</Button> : <Button variant="outlined">Generar QR</Button>)}
                                 </PDFDownloadLink>
                             </Grid>
