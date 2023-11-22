@@ -33,6 +33,7 @@ export default function Page() {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+  const baseUrl = "http://localhost:8080/breeder/postBreeder";
 
   return (
     <>
@@ -45,49 +46,39 @@ export default function Page() {
           last_name: "",
           second_last_name: "",
         }}
- 
         onSubmit={async (values) => {
           try {
-            console.log("funciona pa");
-            const token = Cookies.get("token");
-            axios
-              .post(baseUrl, {
-                username: values.username,
-                password: values.password,
-                mail: values.mail,
-                name: values.name,
-                last_name: values.last_name,
-                second_last_name: values.second_last_name,
-              })
-              .then((response) => {
-                console.log(response);
-                const token = response.data.password;
-                const expires = response.headers["expires"];
-                Cookies.set("token", token, { expires: new Date(expires) });
-                if (response.data != "") {
-                  setStatus({ success: true });
-                  setSubmitting(true);
-                  window.location.href = "http://localhost:3000/Login";
-                } else {
-                  setStatus({ success: false });
-                  setErrors({ submit: "El usuario NO fue creado" });
-                  setSubmitting(false);
-                }
-              });
+            console.log(values);
+            const usersName = JSON.stringify({
+              username: values.username,
+              password: values.password,
+              mail: values.mail,
+              name: values.name,
+              last_name: values.last_name,
+              second_last_name: values.second_last_name,
+            });
+            const customConfig = {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            };
+            axios.post(baseUrl, usersName, customConfig);
+            console.log(values).then((response) => {
+              if (response.data != "") {
+                window.location.href = "http://localhost:3000/Login";
+              } else {
+                console.log("El Usuario fue creado :)");
+              }
+            });
           } catch (error) {
-            console.error(err);
-            if (scriptedRef.current) {
-              setStatus({ success: false });
-              setErrors({ submit: err.message });
-              setSubmitting(false);
-            }
+            console.error(error);
           }
         }}
       >
         {({ errors, handleBlur, handleChange, handleSubmit, values }) => (
           <form
             style={{
-              margin: 20
+              margin: 20,
             }}
             onSubmit={handleSubmit}
           >
@@ -191,10 +182,10 @@ export default function Page() {
                       <Grid item xs={12} lg={6}>
                         <TextField
                           label="user"
-                          id="user"
+                          id="username"
                           multiline
                           required
-                          value={values.user}
+                          value={values.username}
                           onChange={handleChange}
                           error={Boolean(errors.valores)}
                           helperText={errors.valores}
@@ -228,14 +219,18 @@ export default function Page() {
                           Contraseña
                         </InputLabel>
                       </Grid>
-                          
-                          <Grid item xs={12} sx={{
-                            color:"black"
-                          }}>
-                            <Typography>Agregar Criadero</Typography>
-                          </Grid>
-              
-                          <Grid item xs={12} lg={6}>
+
+                      <Grid
+                        item
+                        xs={12}
+                        sx={{
+                          color: "black",
+                        }}
+                      >
+                        <Typography>Agregar Criadero</Typography>
+                      </Grid>
+
+                      {/* <Grid item xs={12} lg={6}>
                             <InputLabel style={{ fontSize: 12 }}>
                               Nombre 
                             </InputLabel>
@@ -259,8 +254,7 @@ export default function Page() {
                               Descripción
                             </InputLabel>
                             <TextField fullWidth multiline />
-                          </Grid>
-                          
+                          </Grid> */}
                     </Grid>
                     <div
                       style={{
@@ -276,8 +270,6 @@ export default function Page() {
                   </div>
                 </div>
               </div>
-
-
             </Grid>
           </form>
         )}
@@ -285,5 +277,3 @@ export default function Page() {
     </>
   );
 }
-
-
