@@ -25,21 +25,25 @@ const token = config.auth.token
 
 export default function Home() {
   const [criadero, setCriaderos] = useState(null)
-  console.log(token)
+  const [isLoading, setLoading] = useState(true);
+
   useEffect(() => {
     axios.get(baseURL, {
       headers: {
+        Authorization: `Bearer ${token}`,
         Authorization: `Bearer ${token}`,
       },
       params: {
         "token": token
       }
     }).then(response => {
-      setCriaderos(response?.data);
+      setCriaderos(response.data);
+      setLoading(false);
     })
       .catch(error => {
         console.log(error)
       });
+
   }, []);
   
   const style = {
@@ -56,6 +60,11 @@ export default function Home() {
   const [openModalEdit, setOpenModalEdit] = React.useState(false);
   const handleOpenEdit = () => setOpenModalEdit(true);
   const handleCloseEdit = () => setOpenModalEdit(false);
+
+  if (isLoading) {
+    return <div className="App">Loading...</div>;
+  }
+
   return (
     <div style={{ margin: 15 }}>
       <Grid container direction="row" spacing={2}>
