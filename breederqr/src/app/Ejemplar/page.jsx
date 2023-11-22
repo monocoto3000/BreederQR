@@ -45,7 +45,29 @@ import FormLabel from '@mui/material/FormLabel';
 
 export default function Ejemplares() {
     const token = config.auth.token
-    const softDeleteAnimalURL = "http://localhost:8080/animal/deleteAnimal"
+    const idAnimal = config.animal.id
+    // const softDeleteAnimalURL = "http://localhost:8080/animal/deleteAnimal"
+    // axios.delete(softDeleteAnimalURL, {
+    //     params: { 
+    //         id: 1,
+    //         tokem: token
+    //      }
+    // })
+    //     .then(response => {
+    //         console.log(response.data);
+    //     })
+    //     .catch(error => {
+    //         if (error.response) {
+    //             console.log(error.response.data);
+    //             console.log(error.response.status);
+    //             console.log(error.response.headers);
+    //         } else if (error.request) {
+    //             console.log(error.request);
+    //         } else {
+    //             console.log('Error', error.message);
+    //         }
+    //         console.log(error.config);
+    //     });
 
     const [open, setOpen] = React.useState(false);
     const [expanded, setExpanded] = React.useState(false);
@@ -79,7 +101,7 @@ export default function Ejemplares() {
         )
     }
 
-    const getAnimalUrl = "http://localhost:8080/animal/getAnimalById?id=1"
+    const getAnimalUrl = `http://localhost:8080/animal/getAnimalById`
     const [animal, setAnimal] = useState(null)
     const [isLoading, setLoading] = useState(true);
     useEffect(() => {
@@ -88,7 +110,7 @@ export default function Ejemplares() {
                 Authorization: `Bearer ${token}`,
             },
             params: {
-                "id": 1
+                "id": idAnimal
             }
         }).then(response => {
             setAnimal(response.data);
@@ -126,6 +148,7 @@ export default function Ejemplares() {
             img: "https://via.placeholder.com/300.png/09f/fff",
             descripcion: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sed nisi nunc. Integer nec turpis in urna eleifend imperdiet nec in augue. Curabitur dignissim sodales augue"
         }]
+
 
     const cardData = [
         { id: 1, nombre: 'Felipe', sexo: "H", nacimiento: "12/42/2004", img: "https://via.placeholder.com/300.png/09f/fff", especie: "Astrolopitecus", parentesco: "Mamá" },
@@ -249,6 +272,7 @@ export default function Ejemplares() {
     }
     const putAnimal = "http://localhost:8080/animal/putAnimal"
     console.log(selectedfile)
+    
     if (isLoading) {
         return <div className="App">Loading...</div>;
     }

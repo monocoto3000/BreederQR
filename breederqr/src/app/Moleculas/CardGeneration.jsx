@@ -2,6 +2,7 @@
 import React from 'react';
 import Cards from './Cards';
 import { Grid } from '@mui/material';
+import config from '../../../config';
 
 export default function CardGeneration(aux) {
     console.log(aux)
