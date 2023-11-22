@@ -1,9 +1,5 @@
 "use client";
 import React from "react";
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
 import { Button, Grid, TextField, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useEffect } from "react";
@@ -20,6 +16,8 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import "../../css/form.css";
 import { values } from "lodash";
+import config from "../../../config";
+import Cookies from 'js-cookie';
 
 export default function page() {
   const ColorButton = styled(Button)(({ theme }) => ({
@@ -55,38 +53,25 @@ export default function page() {
         // })}
         onSubmit={async (values) => {
           try {
-            console.log("si")
-            axios
-              .post(baseUrl, {
-                params: {
-                  "user": values.user,
-                  "password": values.password,
-                }
-              })
+            axios.post(baseUrl, {
+              email: values.user,
+              password: values.password,
+            })
               .then((response) => {
-                console.log(response);
-                const token = response.data.password;
-                const expires = response.headers["expires"];
-                Cookies.set("token", token, { expires: new Date(expires) });
+                const token = response.data.accessToken;
+            
+                config.auth.token = token
                 if (response.data != "") {
-                  setStatus({ success: true });
-                  setSubmitting(true);
-                  console.log("si")
+                  Cookies.set('token', token);
                   window.location.href = "http://localhost:3000/";
                 } else {
-                  setStatus({ success: false });
-                  setErrors({ submit: "Usuario o Contraseña incorrecta" });
-                  setSubmitting(false);
+      
                   console.log("Usuario o Contraseña incorrecta")
                 }
               });
           } catch (error) {
             console.error(err);
-            if (scriptedRef.current) {
-              setStatus({ success: false });
-              setErrors({ submit: err.message });
-              setSubmitting(false);
-            }
+        
           }
         }}
       >
