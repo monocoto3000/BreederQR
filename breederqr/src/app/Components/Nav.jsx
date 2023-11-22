@@ -36,11 +36,11 @@ const pages = [
     href: "../Imagen",
   },
   {
-    nombrePage: "Galeria",
+    nombrePage: "Agregar ejemplar",
     href: "../form",
   },
   {
-    nombrePage: "Contactanos",
+    nombrePage: "Ejemplares",
     href: "../Ejemplares",
   },
   {

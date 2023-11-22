@@ -68,7 +68,7 @@ export default function Cards(aux) {
 
   return (
     <>
-      <CardStyle style={{ cursor: "pointer" }}>
+      <CardStyle style={{ cursor: "pointer" }} onClick={() => window.location.href='../Ejemplar'}>
         <CardContent>
           <Grid container>
             <Grid item lg={4}>

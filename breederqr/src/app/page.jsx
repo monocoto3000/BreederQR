@@ -28,9 +28,6 @@ export default function Home() {
   const [criadero, setCriadero] = useState(null)
   useEffect(() => {
     axios.get(baseURL, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       params: {
         "token": token
       }
