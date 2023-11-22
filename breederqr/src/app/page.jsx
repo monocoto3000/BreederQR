@@ -26,10 +26,11 @@ const token = config.auth.token
 
 export default function Home() {
   const [criadero, setCriadero] = useState(null)
+  console.log(token)
   useEffect(() => {
     axios.get(baseURL, {
       headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxLHVzZXJAZ21haWwuY29tIiwiaXNzIjoiQnJlZWRlclFSIiwiaWF0IjoxNzAwNjI1MDUzLCJleHAiOjE3MDA3MTE0NTN9.nArL7GCeraTNdwwWiRrCS6LkX_AOZtJ9z3XcUH0iQjx-Cm4swFcj3WRs8cV33qo5mtbeJBEI6HYhm9OzmdYaGg`,
+        Authorization: `Bearer ${token}`,
       },
       params: {
         "token": token
@@ -41,7 +42,6 @@ export default function Home() {
         console.log(error)
       });
   }, []);
-
   console.log(criadero)
   const style = {
     position: 'absolute',
