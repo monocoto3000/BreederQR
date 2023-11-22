@@ -2,7 +2,7 @@ import SubCard from "./ui-component/cards/SubCard";
 import MainCard from './ui-component/cards/MainCard';
 import { Grid } from '@mui/material';
 import { useState } from 'react';
-import uniqid from 'uniqid';
+
 import "../Components/Anexos.css"
 
 export default function Anexos() {
@@ -56,7 +56,7 @@ export default function Anexos() {
                     return [
                         ...preValue,
                         {
-                            id: uniqid(),
+                            
                             nombre: e.target.files[i].name,
                             tipo: e.target.files[i].type.toString(),
                             contenido: subCadena[1],
