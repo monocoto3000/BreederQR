@@ -34,9 +34,41 @@ import { Formik } from 'formik';
 import { useState } from "react";
 import uniqid from 'uniqid';
 import "../Components/Anexos.css"
-
+import config from "../../../config";
+import { useEffect } from "react";
+import axios from "axios";
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 
 export default function Ejemplares() {
+    const token = config.auth.token
+    const idAnimal = config.animal.id
+    // const softDeleteAnimalURL = "http://localhost:8080/animal/deleteAnimal"
+    // axios.delete(softDeleteAnimalURL, {
+    //     params: { 
+    //         id: 1,
+    //         tokem: token
+    //      }
+    // })
+    //     .then(response => {
+    //         console.log(response.data);
+    //     })
+    //     .catch(error => {
+    //         if (error.response) {
+    //             console.log(error.response.data);
+    //             console.log(error.response.status);
+    //             console.log(error.response.headers);
+    //         } else if (error.request) {
+    //             console.log(error.request);
+    //         } else {
+    //             console.log('Error', error.message);
+    //         }
+    //         console.log(error.config);
+    //     });
+
     const [open, setOpen] = React.useState(false);
     const [expanded, setExpanded] = React.useState(false);
     const handleAcordion = (panel) => (event, isExpanded) => {
@@ -68,6 +100,44 @@ export default function Ejemplares() {
             </Document>
         )
     }
+
+    const getAnimalUrl = `http://localhost:8080/animal/getAnimalById`
+    const [animal, setAnimal] = useState(null)
+    const [isLoading, setLoading] = useState(true);
+    useEffect(() => {
+        axios.get(getAnimalUrl, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            params: {
+                "id": idAnimal
+            }
+        }).then(response => {
+            setAnimal(response.data);
+            setLoading(false);
+        })
+            .catch(error => {
+                console.log(error)
+            });
+    }, []);
+
+    const imagesURL = "http://localhost:8080/photo/getPhoto?idBreedingPace=1"
+    const [imgage, setImage] = useState(null)
+    useEffect(() => {
+        axios.get(imagesURL, {
+            params: {
+                "idBreedingPace": 1
+            }
+        }).then(response => {
+            setImage(response.data);
+            setLoading(false);
+        })
+            .catch(error => {
+                console.log(error)
+            });
+    }, []);
+
+    const postPhotoURL = "http://localhost:8080/photo/postPhoto"
     const pacientes = [
         {
             nombre: "Gecko3000",
@@ -78,6 +148,8 @@ export default function Ejemplares() {
             img: "https://via.placeholder.com/300.png/09f/fff",
             descripcion: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sed nisi nunc. Integer nec turpis in urna eleifend imperdiet nec in augue. Curabitur dignissim sodales augue"
         }]
+
+
     const cardData = [
         { id: 1, nombre: 'Felipe', sexo: "H", nacimiento: "12/42/2004", img: "https://via.placeholder.com/300.png/09f/fff", especie: "Astrolopitecus", parentesco: "Mamá" },
         { id: 2, nombre: 'Pancho', sexo: "M", nacimiento: "12/42/2004", img: "https://via.placeholder.com/300.png/09f/fff", especie: "Tiranosaurio", parentesco: "Papá" },
@@ -90,6 +162,7 @@ export default function Ejemplares() {
         { id: 4, titulo: 'Nota 4', nota: "Proin facilisis elementum neque quis sodales. Nullam ut diam et sem tincidunt faucibus ac id ante. Nunc pulvinar lacinia porttitor. Praesent varius sed leo at auctor", fecha: "12/42/2004" },
         { id: 5, titulo: 'Nota 5', nota: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce bibendum libero vitae est vehicula, et mattis nisl scelerisque.", fecha: "12/42/2004" },
     ];
+
     const imagenes = [
         { img: "https://via.placeholder.com/300.png/09f/fff" },
         { img: "https://via.placeholder.com/300.png/09f/fff" },
@@ -105,8 +178,6 @@ export default function Ejemplares() {
         { img: "https://via.placeholder.com/300.png/09f/fff" },
     ];
 
-    const sexoOptions = ["MACHO", "HEMBRA", "NO SEXADO"]
-    const especieOptions = ["ESPECIE1", "ESPECIE2", "ESPECIE3"]
     const AccordionSummary = styled((props) => (
         <MuiAccordionSummary
             expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
@@ -137,14 +208,6 @@ export default function Ejemplares() {
     const [Files, SetFiles] = useState([]);
     const [selectedfile, SetSelectedFile] = useState([]);
 
-    // const DeleteFile = async (id) => {
-    //     if (window.confirm("¿Seguro/a que desea borrar ese documento?")) {
-    //         const result = Files.filter((data) => data.id !== id);
-    //         SetFiles(result);
-    //     } else {
-    //         // alert('No');
-    //     }
-    // }
 
     const FileUploadSubmit = async (e) => {
         e.preventDefault();
@@ -172,7 +235,6 @@ export default function Ejemplares() {
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
     }
     const InputChange = (e) => {
-        // --For Multiple File Input
         let images = [];
         for (let i = 0; i < e.target.files.length; i++) {
             images.push((e.target.files[i]));
@@ -208,7 +270,12 @@ export default function Ejemplares() {
             // alert('No');
         }
     }
+    const putAnimal = "http://localhost:8080/animal/putAnimal"
     console.log(selectedfile)
+    
+    if (isLoading) {
+        return <div className="App">Loading...</div>;
+    }
     return (
         <>
             <div style={{ margin: 20 }}>
@@ -230,7 +297,7 @@ export default function Ejemplares() {
                             }
                         >
                             <Typography variant="caption" fontSize={18}>
-                                <AlertTitle><strong>¿Desea eliminar al ejemplar {pacientes[0].nombre}?</strong></AlertTitle>
+                                <AlertTitle><strong>¿Desea eliminar al ejemplar {animal.name}?</strong></AlertTitle>
                             </Typography>
                             <Typography variant="caption" fontSize={15}>
                                 Para continuar presione <strong>ELIMINAR</strong>
@@ -250,7 +317,7 @@ export default function Ejemplares() {
                     <Grid item xs={12} lg={6}>
                         <MainCard title={
                             <>
-                                {pacientes[0].nombre}
+                                {animal.name}
                                 <Button
                                     variant="outlined"
                                     color="error"
@@ -269,7 +336,7 @@ export default function Ejemplares() {
                                     <div style={{ textAlign: "center" }}>
                                         <img
                                             style={{ borderRadius: "100%", width: 180, height: 180 }}
-                                            src={pacientes[0].img}
+                                            src={animal.birthday}
                                             alt="new"
                                         />
                                     </div>
@@ -277,17 +344,20 @@ export default function Ejemplares() {
                                 <Grid item xs={12} lg={8}>
                                     <Chip label={
                                         <Typography variant="subtitle1">
-                                            <b>{pacientes[0].nacimiento}</b>
+                                            <b>{animal.birthday}</b>
                                         </Typography>
                                     } variant="outlined" style={{ float: "right" }} />
                                     <Typography variant="h5" gutterBottom>
-                                        <b>Sexo:</b> {pacientes[0].sexo}
+                                        <b>Sexo:</b> {animal.gender}
                                     </Typography>
                                     <Typography variant="h5" gutterBottom>
-                                        <b>Edad:</b> {pacientes[0].edad} Años
+                                        <b>Número de Registro:</b> {animal.register_number}
                                     </Typography>
                                     <Typography variant="h5" gutterBottom>
-                                        <b>Especie:</b> {pacientes[0].especie}
+                                        <b>Especie:</b> {animal.specie.name}
+                                    </Typography>
+                                    <Typography variant="subtitle1" gutterBottom>
+                                        <b>Fecha de registro:</b> {animal.createdAt}
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -336,7 +406,7 @@ export default function Ejemplares() {
                                     Descripción
                                 </Typography>
                                 <Typography variant="subtitle1" gutterBottom>
-                                    {pacientes[0].descripcion}
+                                    {animal.description}
                                 </Typography>
                                 <PDFDownloadLink document={<QR />} fileName={pacientes[0].nombre + "_qr"}>
                                     {({ loading }) => (loading ? <Button variant="outlined"><CircularProgress />Generando QR</Button> : <Button variant="outlined">Generar QR</Button>)}
@@ -379,7 +449,7 @@ export default function Ejemplares() {
                         <div style={{ height: 20 }} />
                         <MainCard title={
                             <>
-                                Notas
+                                Galeria
                                 <Button
                                     variant="outlined"
                                     style={{ float: "right", marginRight: 10 }}
@@ -390,11 +460,11 @@ export default function Ejemplares() {
                             </>
                         }>
                             <Grid container direction="row" spacing={1}>
-                                {imagenes.map((imagen) => (
+                                {imgage?.map((imagen) => (
                                     <Grid item xs md lg={2}>
                                         <img
                                             style={{ borderRadius: 10, width: 100, height: 100 }}
-                                            src={imagen.img}
+                                            src={imagen.url}
                                             alt="new"
                                         />
                                     </Grid>
@@ -503,29 +573,32 @@ export default function Ejemplares() {
 
                 <Formik
                     initialValues={{
-                        specie: '',
-                        birthday: '',
-                        breedingPlace: '',
-                        gender: '',
-                        name: '',
-                        description: '',
+                        specie: animal.specie.id,
+                        birthday: animal.birthday,
+                        breedingPlace: animal.breedingPlace.id,
+                        gender: animal.gender,
+                        name: animal.name,
+                        description: animal.description,
+                        register_number: animal.register_number,
+                        token: token
                     }}
                     onSubmit={async (values) => {
-                        // const token = Cookies.get('token');
-                        axios.post(baseURL,
-                            {
-                                "specie": values.specie,
-                                "birthday": values.birthday,
-                                "breedingPlace": values.breedingPlace,
-                                "gender": values.gender,
-                                "name": values.name,
-                                "description": values.description,
-                            }, {
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                                'Content-Type': 'application/json',
-                            }
-                        })
+                        try {
+                            axios.put(putAnimal, {
+                                specie: values.specie,
+                                breedingPlace: values.breedingPlace,
+                                birthday: values.birthday,
+                                gender: values.gender,
+                                name: values.name,
+                                description: values.description,
+                                register_number: values.register_number,
+                                token: token
+                            }).then(Response);
+                            console.log("Ejemplar actualizado exitosamente")
+                        } catch (error) {
+                            console.log("Hubo un error al actualizar al ejemplar")
+                            console.error(error);
+                        }
                     }}
                 >
                     {({ errors, handleBlur, handleChange, handleSubmit, values, setFieldValue }) => (
@@ -548,62 +621,79 @@ export default function Ejemplares() {
                                         <Grid container spacing={2}>
                                             <Grid item lg={12} xs={12}>
                                                 <Typography variant="h6" component="h2">
-                                                    Editar a <strong>{pacientes[0].nombre}</strong>
+                                                    Editar a <strong>{animal.name}</strong>
                                                 </Typography>
                                             </Grid>
-                                            <Grid item xs={12} lg={3}>
+                                            <Grid item xs={12} lg={6}>
                                                 <InputLabel style={{ fontSize: 12 }}>
                                                     Nombre
                                                 </InputLabel>
                                                 <TextField
+                                                    id="name"
                                                     required
                                                     value={values.name}
                                                     fullWidth
-                                                    defaultValue={pacientes[0].nombre} />
-                                            </Grid>
-                                            <Grid item xs={12} lg={3}>
-                                                <InputLabel style={{ fontSize: 12 }}>
-                                                    Sexo
-                                                </InputLabel>
-                                                <Autocomplete
-                                                    disablePortal
-                                                    options={sexoOptions}
-                                                    required
-                                                    getOptionLabel={(option) => (typeof option === 'string' || option instanceof String ? option : '')}
-                                                    onChange={(e, value) => {
-                                                        console.log(value);
-                                                        setFieldValue('gender', value !== null ? value : values.gender);
-                                                    }}
-                                                    renderInput={(params) => <TextField {...params} />}
+                                                    onChange={handleChange}
                                                 />
+                                            </Grid>
+                                            <Grid item xs={12} lg={6}>
+                                                <InputLabel style={{ fontSize: 12 }}>
+                                                    Número de registro
+                                                </InputLabel>
+                                                <TextField
+                                                    id="register_number"
+                                                    required
+                                                    onChange={handleChange}
+                                                    value={values.register_number}
+                                                    fullWidth
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} lg={6}>
+                                                <FormControl>
+                                                    <FormLabel id="demo-radio-buttons-group-label">Sexo</FormLabel>
+                                                    <RadioGroup
+                                                        aria-labelledby="demo-radio-buttons-group-label"
+                                                        defaultValue={1}
+                                                        id="gender"
+                                                        name="radio-buttons-group"
+                                                        row
+                                                        value={values.gender}
+                                                    >
+                                                        <FormControlLabel control={<Radio />} label="MACHO" value="M" />
+                                                        <FormControlLabel control={<Radio />} label="HEMBRA" value="H" />
+                                                        <FormControlLabel control={<Radio />} label="NO SEXADO" value="I" />
+                                                    </RadioGroup>
+                                                </FormControl>
                                             </Grid>
                                             <Grid item xs={12} lg={3}>
                                                 <InputLabel style={{ fontSize: 12 }}>
                                                     Fecha de nacimiento
                                                 </InputLabel>
                                                 <TextField
+                                                    type="date"
                                                     value={values.birthday}
                                                     fullWidth
                                                     required
-                                                    multiline
-                                                    defaultValue={pacientes[0].nacimiento}
+                                                    onChange={handleChange}
+                                                    id="birthday"
                                                 />
                                             </Grid>
                                             <Grid item xs={12} lg={3}>
-                                                <InputLabel style={{ fontSize: 12 }}>
-                                                    Especie
-                                                </InputLabel>
-                                                <Autocomplete
-                                                    disablePortal
-                                                    options={especieOptions}
-                                                    required
-                                                    getOptionLabel={(option) => (typeof option === 'string' || option instanceof String ? option : '')}
-                                                    onChange={(e, value) => {
-                                                        console.log(value);
-                                                        setFieldValue('especie', value !== null ? value : values.specie);
-                                                    }}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                />
+                                                <FormControl>
+                                                    <FormLabel id="demo-radio-buttons-group-label">Especie</FormLabel>
+                                                    <RadioGroup
+                                                        id="specie"
+                                                        value={values.specie}
+                                                        aria-labelledby="demo-radio-buttons-group-label"
+                                                        defaultValue={1}
+                                                        name="radio-buttons-group"
+                                                        row
+                                                    >
+                                                        <FormControlLabel control={<Radio />} label="GECKO" value={1} />
+                                                        <FormControlLabel control={<Radio />} label="CABALLO" value={2} />
+                                                        <FormControlLabel control={<Radio />} label="VACA" value={3} />
+                                                    </RadioGroup>
+                                                </FormControl>
                                             </Grid>
                                             <Grid item xs={12} lg={12}>
                                                 <InputLabel style={{ fontSize: 12 }}>
@@ -614,7 +704,8 @@ export default function Ejemplares() {
                                                     fullWidth
                                                     multiline
                                                     required
-                                                    defaultValue={pacientes[0].descripcion}
+                                                    id="description"
+                                                    onChange={handleChange}
                                                 />
                                             </Grid>
                                             <Grid item xs={12} lg={12}>
@@ -628,104 +719,126 @@ export default function Ejemplares() {
                     )}
                 </Formik>
 
-                <Modal
-                    aria-labelledby="transition-modal-title"
-                    aria-describedby="transition-modal-description"
-                    open={openModalImg}
-                    onClose={handleCloseImg}
-                    closeAfterTransition
-                    slots={{ backdrop: Backdrop }}
-                    slotProps={{
-                        backdrop: {
-                            timeout: 500,
-                        },
+                <Formik
+                    initialValues={{
+                        idAnimal: '',
+                        photo: '',
+                        token: '',
+                    }}
+                    onSubmit={async (values) => {
+                        axios.post(postPhotoURL,
+                            {
+                                "idAnimal": values.specie,
+                                "photo": selectedfile,
+                                "token": token
+                            }
+                        )
                     }}
                 >
-                    <Fade in={openModalImg}>
-                        <Box sx={style}>
-                            <MainCard title="Anexos">
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12}>
-                                        <Grid container spacing={2}>
-                                            <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                <div className="fileupload-view">
-                                                    <div className="row justify-content-center">
-                                                        <div>
-                                                            <div className="card">
-                                                                <div className="card-body">
-                                                                    <div className="kb-data-box">
-                                                                        <div className="kb-modal-data-title">
-                                                                            <div className="kb-data-title">
-                                                                                <h6>Subir documentos e imagenes</h6>
-                                                                            </div>
-                                                                        </div>
-                                                                        <form>
-                                                                            <div className="kb-file-upload">
-                                                                                <div className="file-upload-box">
-                                                                                    <input type="file" id="fileupload" className="file-upload-input" onChange={InputChange} multiple />
-                                                                                    <span>Arrastra y suelta o <span className="file-link">Seleccione sus documentos</span></span>
+                    {({ errors, handleBlur, handleChange, handleSubmit, values, setFieldValue }) => (
+                        <form onSubmit={handleSubmit}>
+                            <Modal
+                                aria-labelledby="transition-modal-title"
+                                aria-describedby="transition-modal-description"
+                                open={openModalImg}
+                                onClose={handleCloseImg}
+                                closeAfterTransition
+                                slots={{ backdrop: Backdrop }}
+                                slotProps={{
+                                    backdrop: {
+                                        timeout: 500,
+                                    },
+                                }}
+                            >
+                                <Fade in={openModalImg}>
+                                    <Box sx={style}>
+                                        <MainCard title="Anexos">
+                                            <Grid container spacing={2}>
+                                                <Grid item xs={12}>
+                                                    <Grid container spacing={2}>
+                                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                            <div className="fileupload-view">
+                                                                <div className="row justify-content-center">
+                                                                    <div>
+                                                                        <div className="card">
+                                                                            <div className="card-body">
+                                                                                <div className="kb-data-box">
+                                                                                    <div className="kb-modal-data-title">
+                                                                                        <div className="kb-data-title">
+                                                                                            <h6>Subir documentos e imagenes</h6>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <form>
+                                                                                        <div className="kb-file-upload">
+                                                                                            <div className="file-upload-box">
+                                                                                                <input type="file" id="fileupload" className="file-upload-input" onChange={InputChange} multiple />
+                                                                                                <span>Arrastra y suelta o <span className="file-link">Seleccione sus documentos</span></span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div className="kb-attach-box mb-3">
+                                                                                            {selectedfile.map((data) => {
+                                                                                                const { id, nombre, contenido, imagen, datetime, filesize } = data;
+                                                                                                return (
+                                                                                                    <div className="file-atc-box" key={id}>
+                                                                                                        {nombre.match(/.(jpg|jpeg|png|gif|svg)$/i) ?
+                                                                                                            <div className="file-image"> <img src={imagen} alt="" /></div> :
+                                                                                                            <div className="file-image"><i className="far fa-file-alt"></i></div>}
+                                                                                                        <div className="file-detail">
+                                                                                                            <h6>{nombre}</h6>
+                                                                                                            <p><span>Size : {filesize}</span><span className="ml-2"><br></br>Tiempo de modificación : {datetime}</span></p>
+                                                                                                            <div className="file-actions">
+                                                                                                                <button type="button" className="file-action-btn" onClick={() => DeleteSelectFile(id)}>Eliminar</button>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                );
+                                                                                            })}
+                                                                                        </div>
+                                                                                        <div className="kb-buttons-box">
+                                                                                            <button onClick={FileUploadSubmit} className="btn btn-primary form-submit" type="submit">Subir</button>
+                                                                                        </div>
+                                                                                    </form>
+                                                                                    {Files.length > 0 ?
+                                                                                        <div className="kb-attach-box">
+                                                                                            <hr />
+                                                                                            {Files.map((data, index) => {
+                                                                                                const { nombre, contenido, imagen, datetime, filesize } = data;
+                                                                                                return (
+                                                                                                    <div className="file-atc-box" key={index}>
+                                                                                                        {nombre.match(/.(jpg|jpeg|png|gif|svg)$/i) ?
+                                                                                                            <div className="file-image"> <img src={imagen} alt="" /></div> :
+                                                                                                            <div className="file-image"><i className="far fa-file-alt"></i></div>}
+                                                                                                        <div className="file-detail">
+                                                                                                            <h6>{nombre}</h6>
+                                                                                                            <p><span>Tamaño: {filesize}</span><span className="ml-3">Tiempo de modificación: {datetime}</span></p>
+                                                                                                            <div className="file-actions">
+                                                                                                                <a href={contenido} className="file-action-btn" download={nombre}>Descargar</a>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                );
+                                                                                            })}
+                                                                                        </div>
+                                                                                        : ''}
                                                                                 </div>
                                                                             </div>
-                                                                            <div className="kb-attach-box mb-3">
-                                                                                {selectedfile.map((data) => {
-                                                                                    const { id, nombre, contenido, imagen, datetime, filesize } = data;
-                                                                                    return (
-                                                                                        <div className="file-atc-box" key={id}>
-                                                                                            {nombre.match(/.(jpg|jpeg|png|gif|svg)$/i) ?
-                                                                                                <div className="file-image"> <img src={imagen} alt="" /></div> :
-                                                                                                <div className="file-image"><i className="far fa-file-alt"></i></div>}
-                                                                                            <div className="file-detail">
-                                                                                                <h6>{nombre}</h6>
-                                                                                                <p><span>Size : {filesize}</span><span className="ml-2"><br></br>Tiempo de modificación : {datetime}</span></p>
-                                                                                                <div className="file-actions">
-                                                                                                    <button type="button" className="file-action-btn" onClick={() => DeleteSelectFile(id)}>Eliminar</button>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    );
-                                                                                })}
-                                                                            </div>
-                                                                            <div className="kb-buttons-box">
-                                                                                <button onClick={FileUploadSubmit} className="btn btn-primary form-submit" type="submit">Subir</button>
-                                                                            </div>
-                                                                        </form>
-                                                                        {Files.length > 0 ?
-                                                                            <div className="kb-attach-box">
-                                                                                <hr />
-                                                                                {Files.map((data, index) => {
-                                                                                    const { nombre, contenido, imagen, datetime, filesize } = data;
-                                                                                    return (
-                                                                                        <div className="file-atc-box" key={index}>
-                                                                                            {nombre.match(/.(jpg|jpeg|png|gif|svg)$/i) ?
-                                                                                                <div className="file-image"> <img src={imagen} alt="" /></div> :
-                                                                                                <div className="file-image"><i className="far fa-file-alt"></i></div>}
-                                                                                            <div className="file-detail">
-                                                                                                <h6>{nombre}</h6>
-                                                                                                <p><span>Tamaño: {filesize}</span><span className="ml-3">Tiempo de modificación: {datetime}</span></p>
-                                                                                                <div className="file-actions">
-                                                                                                    <a href={contenido} className="file-action-btn" download={nombre}>Descargar</a>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    );
-                                                                                })}
-                                                                            </div>
-                                                                            : ''}
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                        </Grid>
+                                                    </Grid>
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                            </MainCard>
-                        </Box>
-                    </Fade>
-                </Modal>
+                                        </MainCard>
+                                    </Box>
+                                </Fade>
+                            </Modal>
+                        </form>
+                    )}
+                </Formik>
             </div>
+
         </>
     )
 }
