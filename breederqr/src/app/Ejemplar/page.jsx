@@ -42,11 +42,11 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import image from "/Users/Mon/Desktop/BreederQrBack/BreederQr/src/main/resources/files/animals/PEdrito-QRCODE.png"
+import Cookies from 'js-cookie';
 
 export default function Ejemplares() {
     const token = config.auth.token
-    const idAnimal = config.animal.id
+    const idAnimal = Cookies.get("animalId")
     // const softDeleteAnimalURL = "http://localhost:8080/animal/deleteAnimal"
     // axios.delete(softDeleteAnimalURL, {
     //     params: { 
@@ -128,7 +128,7 @@ export default function Ejemplares() {
                     <Text style={styles.title}>{animal.register_number}</Text>
                     <Image
                         style={styles.image}
-                        src={image}/>
+                        src={animal.qr}/>
                 </Page>
             </Document>
         )
@@ -138,7 +138,9 @@ export default function Ejemplares() {
     useEffect(() => {
         axios.get(imagesURL, {
             params: {
-                "idBreedingPace": 1
+                "idBreedingPace": idAnimal,
+                "where": 0,
+                "from": 10
             }
         }).then(response => {
             setImage(response.data);

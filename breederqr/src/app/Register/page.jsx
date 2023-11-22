@@ -49,21 +49,15 @@ export default function Page() {
         onSubmit={async (values) => {
           try {
             console.log(values);
-            const usersName = JSON.stringify({
+
+            axios.post(baseUrl,{
               username: values.username,
               password: values.password,
               mail: values.mail,
               name: values.name,
               last_name: values.last_name,
               second_last_name: values.second_last_name,
-            });
-            const customConfig = {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            };
-            axios.post(baseUrl, usersName, customConfig);
-            console.log(values).then((response) => {
+            }).then((response) => {
               if (response.data != "") {
                 window.location.href = "http://localhost:3000/Login";
               } else {

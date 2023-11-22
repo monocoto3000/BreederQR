@@ -94,10 +94,11 @@ export default function Ejemplares() {
                             <Button variant="contained" size="large" style={{ backgroundColor: "#564E58" }} fullWidth>Aplicar</Button>
                         </Grid> */}
                         {ejemplares.map((ejemplar, index) => {
+                            console.log(ejemplar)
                             return (
                                 <Grid item xs={12} lg={3}>
                                     <div key={index}>
-                                        <Cards aux={ejemplar} />
+                                        <Cards aux={ejemplar}/>
                                     </div>
                                 </Grid>
                             );
