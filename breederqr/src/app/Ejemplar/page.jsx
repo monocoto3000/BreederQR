@@ -3,7 +3,7 @@ import React from "react";
 import MainCard from "../Components/ui-component/cards/MainCard";
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
-import { Card, Grid, Typography, CardContent, Button } from '@mui/material';
+import { Card, Grid, Typography, CardContent, Button, Autocomplete } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -30,6 +30,11 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import InputLabel from '@mui/material/InputLabel';
 import TextField from '@mui/material/TextField';
+import { Formik } from 'formik';
+import { useState } from "react";
+import uniqid from 'uniqid';
+import "../Components/Anexos.css"
+
 
 export default function Ejemplares() {
     const [open, setOpen] = React.useState(false);
@@ -49,7 +54,7 @@ export default function Ejemplares() {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: "60%",
+        width: "70%",
         bgcolor: 'background.paper',
         boxShadow: 24,
         p: 4,
@@ -100,6 +105,8 @@ export default function Ejemplares() {
         { img: "https://via.placeholder.com/300.png/09f/fff" },
     ];
 
+    const sexoOptions = ["MACHO", "HEMBRA", "NO SEXADO"]
+    const especieOptions = ["ESPECIE1", "ESPECIE2", "ESPECIE3"]
     const AccordionSummary = styled((props) => (
         <MuiAccordionSummary
             expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
@@ -118,6 +125,90 @@ export default function Ejemplares() {
     const [openModal, setOpenModal] = React.useState(false);
     const handleOpen = () => setOpenModal(true);
     const handleClose = () => setOpenModal(false);
+
+    const [openModalEdit, setOpenModalEdit] = React.useState(false);
+    const handleOpenEdit = () => setOpenModalEdit(true);
+    const handleCloseEdit = () => setOpenModalEdit(false);
+
+    const [openModalImg, setOpenModalImg] = React.useState(false);
+    const handleOpenImg = () => setOpenModalImg(true);
+    const handleCloseImg = () => setOpenModalImg(false);
+
+    const [Files, SetFiles] = useState([]);
+    const [selectedfile, SetSelectedFile] = useState([]);
+
+    // const DeleteFile = async (id) => {
+    //     if (window.confirm("¿Seguro/a que desea borrar ese documento?")) {
+    //         const result = Files.filter((data) => data.id !== id);
+    //         SetFiles(result);
+    //     } else {
+    //         // alert('No');
+    //     }
+    // }
+
+    const FileUploadSubmit = async (e) => {
+        e.preventDefault();
+        // form reset on submit 
+        if (selectedfile.length > 0) {
+            for (let index = 0; index < selectedfile.length; index++) {
+                SetFiles((preValue) => {
+                    return [
+                        ...preValue,
+                        selectedfile[index]
+                    ]
+                })
+            }
+            SetSelectedFile([]);
+        } else {
+            alert('No ha seleccionado ningun documento')
+        }
+    }
+    const filesizes = (bytes, decimals = 2) => {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    }
+    const InputChange = (e) => {
+        // --For Multiple File Input
+        let images = [];
+        for (let i = 0; i < e.target.files.length; i++) {
+            images.push((e.target.files[i]));
+            let reader = new FileReader();
+            let file = e.target.files[i];
+            reader.onloadend = () => {
+                let subCadena = reader.result.split(",")
+                SetSelectedFile((preValue) => {
+                    return [
+                        ...preValue,
+                        {
+                            id: uniqid(),
+                            nombre: e.target.files[i].name,
+                            tipo: e.target.files[i].type.toString(),
+                            contenido: subCadena[1],
+                            imagen: reader.result,
+                            datetime: e.target.files[i].lastModifiedDate.toLocaleString('en-IN'),
+                            filesize: filesizes(e.target.files[i].size)
+                        }
+                    ]
+                });
+            }
+            if (e.target.files[i]) {
+                reader.readAsDataURL(file);
+            }
+        }
+    }
+    const DeleteSelectFile = (id) => {
+        if (window.confirm("¿Seguro/a que desea borrar ese documento?")) {
+            const result = selectedfile.filter((data) => data.id !== id);
+            SetSelectedFile(result);
+        } else {
+            // alert('No');
+        }
+    }
+    console.log(selectedfile)
     return (
         <>
             <div style={{ margin: 20 }}>
@@ -170,7 +261,7 @@ export default function Ejemplares() {
                                     }}>
                                     Eliminar
                                 </Button>
-                                <Button variant="outlined" style={{ float: "right", marginRight: 10 }} startIcon={<ModeEditIcon />}>Editar</Button>
+                                <Button variant="outlined" style={{ float: "right", marginRight: 10 }} startIcon={<ModeEditIcon />} onClick={handleOpenEdit}>Editar</Button>
                             </>
                         }>
                             <Grid container spacing={2} direction={"row"}>
@@ -286,7 +377,18 @@ export default function Ejemplares() {
                                 </Accordion>))}
                         </MainCard>
                         <div style={{ height: 20 }} />
-                        <MainCard title="Galeria">
+                        <MainCard title={
+                            <>
+                                Notas
+                                <Button
+                                    variant="outlined"
+                                    style={{ float: "right", marginRight: 10 }}
+                                    startIcon={<AddIcon />}
+                                    onClick={handleOpenImg}>
+                                    Agregar
+                                </Button>
+                            </>
+                        }>
                             <Grid container direction="row" spacing={1}>
                                 {imagenes.map((imagen) => (
                                     <Grid item xs md lg={2}>
@@ -301,11 +403,236 @@ export default function Ejemplares() {
                         </MainCard>
                     </Grid>
                 </Grid>
+                <Formik
+                    initialValues={{
+                        title: '',
+                        date: '',
+                        note: ''
+                    }}
+                    onSubmit={async (values) => {
+                        console.log(values)
+                        await new Promise((r) => setTimeout(r, 500));
+                        console.log("funciona o me mato")
+                        // const token = Cookies.get('token');
+                        axios.post(baseURL,
+                            {
+                                "title": values.title,
+                                "date": values.date,
+                                "note": values.note,
+                            }, {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                                'Content-Type': 'application/json',
+                            }
+                        })
+                            .then((response) => {
+                                setPost(response.data);
+                            });
+                    }}
+                >
+                    {({ errors, handleBlur, handleChange, handleSubmit, values, setFieldValue }) => (
+                        <form onSubmit={handleSubmit}>
+                            <Modal
+                                aria-labelledby="transition-modal-title"
+                                aria-describedby="transition-modal-description"
+                                open={openModal}
+                                onClose={handleClose}
+                                closeAfterTransition
+                                slots={{ backdrop: Backdrop }}
+                                slotProps={{
+                                    backdrop: {
+                                        timeout: 500,
+                                    },
+                                }}
+                            >
+                                <Fade in={openModal}>
+                                    <Box sx={style}>
+                                        <Grid container spacing={2}>
+                                            <Grid item lg={12} xs={12}>
+                                                <Typography variant="h6" component="h2">
+                                                    Crear nota
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item xs={12} lg={6}>
+                                                <InputLabel style={{ fontSize: 12 }}>
+                                                    Titulo
+                                                </InputLabel>
+                                                <TextField
+                                                    id="title"
+                                                    required
+                                                    value={values.title}
+                                                    onChange={handleChange}
+                                                    fullWidth
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} lg={6}>
+                                                <InputLabel style={{ fontSize: 12 }}>
+                                                    Fecha
+                                                </InputLabel>
+                                                <TextField
+                                                    required
+                                                    id="date"
+                                                    type="date"
+                                                    value={values.date}
+                                                    onChange={handleChange}
+                                                    fullWidth />
+                                            </Grid>
+                                            <Grid item xs={12} lg={12}>
+                                                <InputLabel style={{ fontSize: 12 }}>
+                                                    Nota
+                                                </InputLabel>
+                                                <TextField
+                                                    id="note"
+                                                    required
+                                                    value={values.note}
+                                                    fullWidth
+                                                    multiline
+                                                    onChange={handleChange}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} lg={12}>
+                                                <Button fullWidth variant='outlined' onClick={handleClose} type="submit">guardar</Button>
+                                            </Grid>
+                                        </Grid>
+                                    </Box>
+                                </Fade>
+                            </Modal>
+                        </form>
+                    )}
+                </Formik>
+
+                <Formik
+                    initialValues={{
+                        specie: '',
+                        birthday: '',
+                        breedingPlace: '',
+                        gender: '',
+                        name: '',
+                        description: '',
+                    }}
+                    onSubmit={async (values) => {
+                        // const token = Cookies.get('token');
+                        axios.post(baseURL,
+                            {
+                                "specie": values.specie,
+                                "birthday": values.birthday,
+                                "breedingPlace": values.breedingPlace,
+                                "gender": values.gender,
+                                "name": values.name,
+                                "description": values.description,
+                            }, {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                                'Content-Type': 'application/json',
+                            }
+                        })
+                    }}
+                >
+                    {({ errors, handleBlur, handleChange, handleSubmit, values, setFieldValue }) => (
+                        <form onSubmit={handleSubmit}>
+                            <Modal
+                                aria-labelledby="transition-modal-title"
+                                aria-describedby="transition-modal-description"
+                                open={openModalEdit}
+                                onClose={handleCloseEdit}
+                                closeAfterTransition
+                                slots={{ backdrop: Backdrop }}
+                                slotProps={{
+                                    backdrop: {
+                                        timeout: 500,
+                                    },
+                                }}
+                            >
+                                <Fade in={openModalEdit}>
+                                    <Box sx={style}>
+                                        <Grid container spacing={2}>
+                                            <Grid item lg={12} xs={12}>
+                                                <Typography variant="h6" component="h2">
+                                                    Editar a <strong>{pacientes[0].nombre}</strong>
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item xs={12} lg={3}>
+                                                <InputLabel style={{ fontSize: 12 }}>
+                                                    Nombre
+                                                </InputLabel>
+                                                <TextField
+                                                    required
+                                                    value={values.name}
+                                                    fullWidth
+                                                    defaultValue={pacientes[0].nombre} />
+                                            </Grid>
+                                            <Grid item xs={12} lg={3}>
+                                                <InputLabel style={{ fontSize: 12 }}>
+                                                    Sexo
+                                                </InputLabel>
+                                                <Autocomplete
+                                                    disablePortal
+                                                    options={sexoOptions}
+                                                    required
+                                                    getOptionLabel={(option) => (typeof option === 'string' || option instanceof String ? option : '')}
+                                                    onChange={(e, value) => {
+                                                        console.log(value);
+                                                        setFieldValue('gender', value !== null ? value : values.gender);
+                                                    }}
+                                                    renderInput={(params) => <TextField {...params} />}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} lg={3}>
+                                                <InputLabel style={{ fontSize: 12 }}>
+                                                    Fecha de nacimiento
+                                                </InputLabel>
+                                                <TextField
+                                                    value={values.birthday}
+                                                    fullWidth
+                                                    required
+                                                    multiline
+                                                    defaultValue={pacientes[0].nacimiento}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} lg={3}>
+                                                <InputLabel style={{ fontSize: 12 }}>
+                                                    Especie
+                                                </InputLabel>
+                                                <Autocomplete
+                                                    disablePortal
+                                                    options={especieOptions}
+                                                    required
+                                                    getOptionLabel={(option) => (typeof option === 'string' || option instanceof String ? option : '')}
+                                                    onChange={(e, value) => {
+                                                        console.log(value);
+                                                        setFieldValue('especie', value !== null ? value : values.specie);
+                                                    }}
+                                                    renderInput={(params) => <TextField {...params} />}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} lg={12}>
+                                                <InputLabel style={{ fontSize: 12 }}>
+                                                    Descripción
+                                                </InputLabel>
+                                                <TextField
+                                                    value={values.description}
+                                                    fullWidth
+                                                    multiline
+                                                    required
+                                                    defaultValue={pacientes[0].descripcion}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} lg={12}>
+                                                <Button fullWidth variant='outlined' onClick={handleCloseEdit} type="sumbit">Actualizar</Button>
+                                            </Grid>
+                                        </Grid>
+                                    </Box>
+                                </Fade>
+                            </Modal>
+                        </form>
+                    )}
+                </Formik>
+
                 <Modal
                     aria-labelledby="transition-modal-title"
                     aria-describedby="transition-modal-description"
-                    open={openModal}
-                    onClose={handleClose}
+                    open={openModalImg}
+                    onClose={handleCloseImg}
                     closeAfterTransition
                     slots={{ backdrop: Backdrop }}
                     slotProps={{
@@ -314,42 +641,87 @@ export default function Ejemplares() {
                         },
                     }}
                 >
-                    <Fade in={openModal}>
+                    <Fade in={openModalImg}>
                         <Box sx={style}>
-                            <Grid container spacing={2}>
-                                <Grid item lg={12} xs={12}>
-                                    <Typography variant="h6" component="h2">
-                                        Crear nota
-                                    </Typography>
+                            <MainCard title="Anexos">
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12}>
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                <div className="fileupload-view">
+                                                    <div className="row justify-content-center">
+                                                        <div>
+                                                            <div className="card">
+                                                                <div className="card-body">
+                                                                    <div className="kb-data-box">
+                                                                        <div className="kb-modal-data-title">
+                                                                            <div className="kb-data-title">
+                                                                                <h6>Subir documentos e imagenes</h6>
+                                                                            </div>
+                                                                        </div>
+                                                                        <form>
+                                                                            <div className="kb-file-upload">
+                                                                                <div className="file-upload-box">
+                                                                                    <input type="file" id="fileupload" className="file-upload-input" onChange={InputChange} multiple />
+                                                                                    <span>Arrastra y suelta o <span className="file-link">Seleccione sus documentos</span></span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="kb-attach-box mb-3">
+                                                                                {selectedfile.map((data) => {
+                                                                                    const { id, nombre, contenido, imagen, datetime, filesize } = data;
+                                                                                    return (
+                                                                                        <div className="file-atc-box" key={id}>
+                                                                                            {nombre.match(/.(jpg|jpeg|png|gif|svg)$/i) ?
+                                                                                                <div className="file-image"> <img src={imagen} alt="" /></div> :
+                                                                                                <div className="file-image"><i className="far fa-file-alt"></i></div>}
+                                                                                            <div className="file-detail">
+                                                                                                <h6>{nombre}</h6>
+                                                                                                <p><span>Size : {filesize}</span><span className="ml-2"><br></br>Tiempo de modificación : {datetime}</span></p>
+                                                                                                <div className="file-actions">
+                                                                                                    <button type="button" className="file-action-btn" onClick={() => DeleteSelectFile(id)}>Eliminar</button>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    );
+                                                                                })}
+                                                                            </div>
+                                                                            <div className="kb-buttons-box">
+                                                                                <button onClick={FileUploadSubmit} className="btn btn-primary form-submit" type="submit">Subir</button>
+                                                                            </div>
+                                                                        </form>
+                                                                        {Files.length > 0 ?
+                                                                            <div className="kb-attach-box">
+                                                                                <hr />
+                                                                                {Files.map((data, index) => {
+                                                                                    const { nombre, contenido, imagen, datetime, filesize } = data;
+                                                                                    return (
+                                                                                        <div className="file-atc-box" key={index}>
+                                                                                            {nombre.match(/.(jpg|jpeg|png|gif|svg)$/i) ?
+                                                                                                <div className="file-image"> <img src={imagen} alt="" /></div> :
+                                                                                                <div className="file-image"><i className="far fa-file-alt"></i></div>}
+                                                                                            <div className="file-detail">
+                                                                                                <h6>{nombre}</h6>
+                                                                                                <p><span>Tamaño: {filesize}</span><span className="ml-3">Tiempo de modificación: {datetime}</span></p>
+                                                                                                <div className="file-actions">
+                                                                                                    <a href={contenido} className="file-action-btn" download={nombre}>Descargar</a>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    );
+                                                                                })}
+                                                                            </div>
+                                                                            : ''}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={12} lg={6}>
-                                    <InputLabel style={{ fontSize: 12 }}>
-                                        Titulo
-                                    </InputLabel>
-                                    <TextField
-                                        fullWidth />
-                                </Grid>
-                                <Grid item xs={12} lg={6}>
-                                    <InputLabel style={{ fontSize: 12 }}>
-                                        Fecha
-                                    </InputLabel>
-                                    <TextField
-                                        defaultValue={new Date().toDateString()}
-                                        fullWidth />
-                                </Grid>
-                                <Grid item xs={12} lg={12}>
-                                    <InputLabel style={{ fontSize: 12 }}>
-                                        Nota
-                                    </InputLabel>
-                                    <TextField
-                                        fullWidth
-                                        multiline
-                                        />
-                                </Grid>
-                                <Grid item xs={12} lg={12}>
-                                    <Button fullWidth variant='outlined' onClick={handleClose}>guardar</Button>
-                                </Grid>
-                            </Grid>
+                            </MainCard>
                         </Box>
                     </Fade>
                 </Modal>

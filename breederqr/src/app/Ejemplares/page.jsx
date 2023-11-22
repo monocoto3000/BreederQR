@@ -14,15 +14,34 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { useState, useEffect } from "react";
+import axios from "axios";
+import config from "../../../config";
 
 export default function Ejemplares() {
     const [age, setAge] = React.useState('');
     const handleChange = (event) => {
         setAge(event.target.value);
     };
+    const baseURL = "http://localhost:8080/animal/getAllAnimals"
+    const token = config.auth.token
+    console.log(token)
+    const [ejemplares, setEjemplares] = useState(null);
+    useEffect(() => {
+        axios.get(baseURL, {
+            params: {
+                "token": token
+            }
+        }).then(response => {
+            setEjemplares(response?.data);
+        })
+            .catch(error => {
+                console.log(error)
+            });
+    }, []);
+    console.log(ejemplares)
     return (
         <>
-
             <div style={{ margin: 20 }}>
                 <MainCard title="Ejemplares">
                     <Grid container direction="row" spacing={2}>
@@ -64,7 +83,15 @@ export default function Ejemplares() {
                         <Grid item xs={12} lg={1}>
                             <Button variant="contained" size="large" style={{ backgroundColor: "#564E58" }} fullWidth>Aplicar</Button>
                         </Grid>
-                        <CardGeneration />
+                        {ejemplares.map((ejemplar, index) => {
+                            return (
+                                <Grid item xs={12} lg={3}>
+                                    <div key={index}>
+                                        <Cards aux={ejemplar} />
+                                    </div>
+                                </Grid>
+                            );
+                        })}
                     </Grid>
                 </MainCard>
             </div >
