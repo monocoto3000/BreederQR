@@ -48,32 +48,22 @@ export default function Page() {
         }}
         onSubmit={async (values) => {
           try {
-            console.log("funciona pa");
-            const token = Cookies.get("token");
-            axios
-              .post(baseUrl, {
-                username: values.username,
-                password: values.password,
-                mail: values.mail,
-                name: values.name,
-                last_name: values.last_name,
-                second_last_name: values.second_last_name,
-              })
-              .then((response) => {
-                console.log(response);
-                const token = response.data.password;
-                const expires = response.headers["expires"];
-                Cookies.set("token", token, { expires: new Date(expires) });
-                if (response.data != "") {
-                  setStatus({ success: true });
-                  setSubmitting(true);
-                  window.location.href = "http://localhost:3000/Criadero";
-                } else {
-                  setStatus({ success: false });
-                  setErrors({ submit: "El usuario NO fue creado" });
-                  setSubmitting(false);
-                }
-              });
+            console.log(values);
+
+            axios.post(baseUrl,{
+              username: values.username,
+              password: values.password,
+              mail: values.mail,
+              name: values.name,
+              last_name: values.last_name,
+              second_last_name: values.second_last_name,
+            }).then((response) => {
+              if (response.data != "") {
+                window.location.href = "http://localhost:3000/Criadero";
+              } else {
+                console.log("El Usuario fue creado :)");
+              }
+            });
           } catch (error) {
             console.error(error);
           }

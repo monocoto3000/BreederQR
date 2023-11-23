@@ -45,8 +45,9 @@ import FormLabel from '@mui/material/FormLabel';
 import Cookies from 'js-cookie';
 
 export default function Ejemplares() {
-    const token = config.auth.token
     const idAnimal = Cookies.get("animalId")
+    const token = Cookies.get("token");
+
     // const softDeleteAnimalURL = "http://localhost:8080/animal/deleteAnimal"
     // axios.delete(softDeleteAnimalURL, {
     //     params: { 
