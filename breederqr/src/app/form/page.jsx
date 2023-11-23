@@ -64,7 +64,7 @@ export default function form() {
 
             axios
               .post("http://localhost:8080/animal/postAnimal", {
-                specie: 1,
+                specie: values.specie,
                 birthday: values.birthday,
                 breedingPlace: breedingPlace,
                 gender: values.gender,

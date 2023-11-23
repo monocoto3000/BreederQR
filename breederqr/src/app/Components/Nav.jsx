@@ -30,10 +30,7 @@ const pages = [
     nombrePage: "Inicio",
     href: "../",
   },
-  {
-    nombrePage: "Servicios",
-    href: "../Imagen",
-  },
+  
   {
     nombrePage: "Agregar ejemplar",
     href: "../form",
@@ -42,10 +39,7 @@ const pages = [
     nombrePage: "Ejemplares",
     href: "../Ejemplares",
   },
-  {
-    nombrePage: "Opcion5",
-    href: "../Ejemplar",
-  },
+ 
 ];
 const perfil = [{
   nombre: "Cesar",

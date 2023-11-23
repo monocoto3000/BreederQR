@@ -22,7 +22,8 @@ import axios from "axios";
 import Cookies from 'js-cookie';
 
 const baseURL = "http://localhost:8080/breedingPlace/getBreedingPlace"
-const token = config.auth.token
+const baseURL2 = "http://localhost:8080/breedingPlace/deleteBreedingPlace"
+const token = Cookies.get("token");
 export default function Home() {
   const [criadero, setCriaderos] = useState(null)
   const [isLoading, setLoading] = useState(true);
@@ -57,6 +58,25 @@ export default function Home() {
     p: 4,
   };
 
+  const deleteBreedingPlace = () => {
+    axios.put(baseURL2, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        "token": token
+      }
+    }).then(response => {
+      setCriaderos(response.data);
+      console.log(response.data);
+      setLoading(false);
+      Cookies.set('breedingPlace', response.data.id);
+
+    })
+      .catch(error => {
+        console.log(error)
+      });
+  }
   const [openModalEdit, setOpenModalEdit] = React.useState(false);
   const handleOpenEdit = () => setOpenModalEdit(true);
   const handleCloseEdit = () => setOpenModalEdit(false);
@@ -114,7 +134,8 @@ export default function Home() {
                             </Box>
                           </Typography>
                           <Typography>
-                            <Button
+                            <Button 
+                              onClick= {deleteBreedingPlace}
                               size="small"
                               variant="outlined"
                               color="error"
