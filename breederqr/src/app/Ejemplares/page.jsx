@@ -17,6 +17,7 @@ import Button from '@mui/material/Button';
 import { useState, useEffect } from "react";
 import axios from "axios";
 import config from "../../../config";
+import Cards from "../Moleculas/Cards";
 
 export default function Ejemplares() {
     const [age, setAge] = React.useState('');
@@ -27,25 +28,34 @@ export default function Ejemplares() {
     const token = config.auth.token
     console.log(token)
     const [ejemplares, setEjemplares] = useState(null);
+    const [isLoading, setLoading] = useState(true);
     useEffect(() => {
         axios.get(baseURL, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
             params: {
+                "from": 6,
+                "where": 0,
                 "token": token
             }
         }).then(response => {
-            setEjemplares(response?.data);
+            setEjemplares(response.data);
+            setLoading(false);
         })
             .catch(error => {
                 console.log(error)
             });
     }, []);
-    console.log(ejemplares)
+    if (isLoading) {
+        return <div className="App">Loading...</div>;
+    }
     return (
         <>
             <div style={{ margin: 20 }}>
                 <MainCard title="Ejemplares">
                     <Grid container direction="row" spacing={2}>
-                        <Grid item xs={12} lg={4}>
+                        {/* <Grid item xs={12} lg={4}>
                             <TextField id="outlined-basic" label="Buscar" variant="outlined" fullWidth />
                         </Grid>
                         <Grid item xs={12} lg={4}>
@@ -82,12 +92,13 @@ export default function Ejemplares() {
                         </Grid>
                         <Grid item xs={12} lg={1}>
                             <Button variant="contained" size="large" style={{ backgroundColor: "#564E58" }} fullWidth>Aplicar</Button>
-                        </Grid>
+                        </Grid> */}
                         {ejemplares.map((ejemplar, index) => {
+                            console.log(ejemplar)
                             return (
                                 <Grid item xs={12} lg={3}>
                                     <div key={index}>
-                                        <Cards aux={ejemplar} />
+                                        <Cards aux={ejemplar}/>
                                     </div>
                                 </Grid>
                             );

@@ -1,19 +1,22 @@
 "use client"
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
-import { Card, Grid, Typography, CardContent } from '@mui/material';
+import { Card, Grid, Typography, CardContent, CardActionArea } from '@mui/material';
 import Chip from '@mui/material/Chip';
 import Icon from '../Atoms/Icon';
 import InsertInvitationRoundedIcon from '@mui/icons-material/InsertInvitationRounded';
+import PetsRoundedIcon from '@mui/icons-material/PetsRounded';
+import config from '../../../config';
+import { useState } from 'react';
+import Cookies from 'js-cookie';
 
 export default function Cards(aux) {
-  console.log(aux.aux)
+  console.log(aux)
+  const handleClick = () => {
+    window.location.href = '../Ejemplar';
+  };
   function colorCard() {
-    if (aux.aux.sexo === "H") {
+    if (aux.aux.gender === "H") {
       return "#fce4ec"
     } else {
       return "#c5cae9"
@@ -21,7 +24,7 @@ export default function Cards(aux) {
   }
 
   function colorLineas() {
-    if (aux.aux.sexo === "H") {
+    if (aux.aux.gender === "H") {
       return "#ec407a"
     } else {
       return "#283593"
@@ -29,7 +32,7 @@ export default function Cards(aux) {
   }
 
   function chipColor() {
-    if (aux.aux.sexo === "H") {
+    if (aux.aux.gender === "H") {
       return "rgba(236, 64, 122, 0.5)"
     } else {
       return "rgba(40, 53, 147, 0.5)"
@@ -65,31 +68,37 @@ export default function Cards(aux) {
       opacity: "50%",
     }
   }));
-
   return (
     <>
-      <CardStyle style={{ cursor: "pointer" }} onClick={() => window.location.href='../Ejemplar'}>
-        <CardContent>
+      <CardStyle  style={{ cursor: "pointer" }}
+        onClick={() => {
+          console.log(aux.aux)
+          Cookies.set('animalId', aux.aux.id);
+
+        }}>
+          <CardActionArea href="/Ejemplar">
+          <CardContent  >
           <Grid container>
             <Grid item lg={4}>
-              <Icon aux={aux.aux} />
+              <PetsRoundedIcon fontSize="large" style={{ width: "75%", height: "75%" }} />
             </Grid>
             <Grid item lg={4}>
-              <Typography variant="h6">{aux.aux.nombre}</Typography>
+              <Typography variant="h6">{aux.aux.name}</Typography>
               <Typography variant="body2" color="grey.900" sx={{ opacity: 0.6 }}>
-                <a style={{ float: "left" }}>{aux.aux.sexo}</a> <br></br>
-                <a style={{ float: "left" }}>{aux.aux.especie}</a> <br></br>
-                <a style={{ float: "left" }}>{aux.aux.edad}</a><br></br>
+                <a style={{ float: "left" }}>{aux.aux.gender}</a> <br></br>
+                <a style={{ float: "left" }}>{aux.aux.specie.name}</a> <br></br>
+                <a style={{ float: "left" }}>{aux.aux.id}</a> <br></br>
               </Typography>
             </Grid>
             <Grid item lg={4}>
-              <Chip icon={<InsertInvitationRoundedIcon color='white'/>} label={aux.aux.nacimiento} size='small' variant='filled' style={{backgroundColor: chipColor(), color: "white"}}/>
+              <Chip icon={<InsertInvitationRoundedIcon color='white' />} label={aux.aux.birthday} size='small' variant='filled' style={{ backgroundColor: chipColor(), color: "white" }} />
             </Grid>
           </Grid>
           <Typography variant="caption" color="black">
-            <a style={{ float: "left", margin: "5px 0 5px 0" }}>{aux.aux.descripcion}</a> <br></br>
+            <a style={{ float: "left", margin: "5px 0 5px 0" }}>{aux.aux.description}</a> <br></br>
           </Typography>
         </CardContent>
+          </CardActionArea>
       </CardStyle>
     </>
   )

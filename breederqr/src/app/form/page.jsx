@@ -1,8 +1,4 @@
 "use client";
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
 import React from "react";
 import {
   Button,
@@ -28,6 +24,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Formik } from "formik";
 import { values } from "lodash";
+import Cookies from 'js-cookie';
 
 export default function form() {
   const ColorButton = styled(Button)(({ theme }) => ({
@@ -39,8 +36,8 @@ export default function form() {
     },
   }));
 
-  const specie = ['Gecko', 'Caballo', 'Vaca'];
-  const gender = ['Macho', 'Hembra', 'Indefinido'];
+  const specie = ["1", 'Caballo', 'Vaca'];
+  const gender = ['M', 'H', 'Indefinido'];
 
   const [sexo, setSexo] = React.useState("");
   const handleChange = (event) => {
@@ -50,7 +47,7 @@ export default function form() {
     <>
       <Formik
         initialValues={{
-          specie: "",
+          specie: 0,
           birthday: "",
           breedingPlace: "",
           gender: "",
@@ -60,25 +57,28 @@ export default function form() {
         }}
         onSubmit={async (values) => {
           try {
-            console.log("funciona pa");
+            console.log(values);
             const token = Cookies.get("token");
+            const breedingPlace = Cookies.get("breedingPlace");
+          
+
             axios
-              .post(baseUrl, {
-                specie: values.specie,
+              .post("http://localhost:8080/animal/postAnimal", {
+                specie: 1,
                 birthday: values.birthday,
-                breedingPlace: values.breedingPlace,
+                breedingPlace: breedingPlace,
                 gender: values.gender,
                 name: values.name,
                 registerNumber: values.registerNumber,
                 description: values.description,
+                token: token
               })
               .then((response) => {
                 console.log(response);
-                const expires = response.headers["expires"];
-                Cookies.set("token", token, { expires: new Date(expires) });
+                alert("creado");
               });
           } catch (error) {
-            console.error(err);
+            console.error(error);
             if (scriptedRef.current) {
               setStatus({ success: false });
               setErrors({ submit: err.message });
@@ -88,7 +88,7 @@ export default function form() {
         }}
       >
         {({ errors, handleBlur, handleChange, handleSubmit, values, setFieldValue }) => (
-          <form style={{ margin: 20 }}>
+          <form onSubmit={handleSubmit} style={{ margin: 20 }}>
             <MainCard title="Ejemplares">
               <Grid
                 container
@@ -215,7 +215,6 @@ export default function form() {
                               fullWidth
                               id="birthday"
                               type="date"
-                              multiline
                               required
                               value={values.birthday}
                               onChange={handleChange}
@@ -327,7 +326,7 @@ export default function form() {
                         }}
                       >
                         <Stack spacing={2} direction="row">
-                          <ColorButton variant="contained">AGREGAR</ColorButton>
+                          <ColorButton type="submit" variant="contained">AGREGAR</ColorButton>
                         </Stack>
                       </Grid>
 
