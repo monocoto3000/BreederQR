@@ -67,7 +67,7 @@ export default function Page() {
                 if (response.data != "") {
                   setStatus({ success: true });
                   setSubmitting(true);
-                  window.location.href = "http://localhost:3000/Login";
+                  window.location.href = "http://localhost:3000/Criadero";
                 } else {
                   setStatus({ success: false });
                   setErrors({ submit: "El usuario NO fue creado" });
