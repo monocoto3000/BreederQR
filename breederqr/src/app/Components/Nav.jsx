@@ -13,7 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import Enlaces from "../Atoms/Enlaces";
-import { Grid } from "@mui/material"; 
+import { Grid } from "@mui/material";
 import "../../css/form.css"
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
@@ -24,13 +24,16 @@ import Backdrop from '@mui/material/Backdrop';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import { OutlinedInput } from '@mui/material';
+import { useState, useEffect } from "react";
+import axios from "axios";
+import Cookies from 'js-cookie';
 
 const pages = [
   {
     nombrePage: "Inicio",
     href: "../",
   },
-  
+
   {
     nombrePage: "Agregar ejemplar",
     href: "../form",
@@ -39,7 +42,7 @@ const pages = [
     nombrePage: "Ejemplares",
     href: "../Ejemplares",
   },
- 
+
 ];
 const perfil = [{
   nombre: "Cesar",
@@ -60,6 +63,30 @@ const style = {
   p: 4,
 };
 function Nav() {
+  const baseURL = "http://localhost:8080/breeder/getBreeder"
+  const [criador, setCriador] = useState(null)
+  const [isLoading, setLoading] = useState(true);
+  const token = Cookies.get("token");
+  useEffect(() => {
+    axios.get(baseURL, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        "token": token
+      }
+    }).then(response => {
+      console.log(response.data); 
+      setCriador(response.data);
+      console.log(criador);
+      setLoading(false);
+      Cookies.set('breederID', response.data.id);
+    })
+      .catch(error => {
+        console.log(error)
+      });
+  }, []);
+  
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [open, setOpen] = React.useState(false);
@@ -67,7 +94,7 @@ function Nav() {
   const handleClose = () => setOpen(false);
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-  
+
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
@@ -77,11 +104,9 @@ function Nav() {
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
-
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
@@ -91,9 +116,7 @@ function Nav() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Grid container spacing={2}>
-
             <Grid item xs={12} lg={2}>
-
               <div
                 style={{
                   display: "flex",
