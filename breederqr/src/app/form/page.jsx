@@ -60,7 +60,6 @@ export default function form() {
             console.log(values);
             const token = Cookies.get("token");
             const breedingPlace = Cookies.get("breedingPlace");
-          
 
             axios
               .post("http://localhost:8080/animal/postAnimal", {

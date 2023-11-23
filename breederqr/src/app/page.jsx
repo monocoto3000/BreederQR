@@ -46,7 +46,7 @@ export default function Home() {
         console.log(error)
       });
   }, []);
-  
+
   const style = {
     position: 'absolute',
     top: '50%',
@@ -59,21 +59,22 @@ export default function Home() {
   };
 
   const deleteBreedingPlace = () => {
-    axios.put(baseURL2, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      params: {
-        "token": token
-      }
-    }).then(response => {
-      setCriaderos(response.data);
-      console.log(response.data);
-      setLoading(false);
-      Cookies.set('breedingPlace', response.data.id);
 
-    })
-      .catch(error => {
+    const formData = new FormData();
+    formData.append("token", token);
+
+    const Headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-type": ''
+    }
+
+    axios.put(
+      baseURL2,
+      formData,
+      { Headers }
+    ).then(response => {
+      alert(response.data)
+    }).catch(error => {
         console.log(error)
       });
   }
@@ -134,8 +135,8 @@ export default function Home() {
                             </Box>
                           </Typography>
                           <Typography>
-                            <Button 
-                              onClick= {deleteBreedingPlace}
+                            <Button
+                              onClick={deleteBreedingPlace}
                               size="small"
                               variant="outlined"
                               color="error"

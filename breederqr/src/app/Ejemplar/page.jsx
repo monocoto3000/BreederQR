@@ -273,7 +273,33 @@ export default function Ejemplares() {
             // alert('No');
         }
     }
-    const putAnimal = "http://localhost:8080/animal/putAnimal"
+
+
+  const deleteAnimal = () => {
+    const formData = new FormData();
+    const putAnimal = "http://localhost:8080/animal/deleteAnimal"
+
+    formData.append("token", token);
+    formData.append("id", idAnimal);
+
+    const headers = {
+      authorization: `Bearer ${token}`,
+      "Content-type": 'multipart/form-data'
+    }
+
+    console.log(formData)
+
+    axios.put(
+      putAnimal,
+      formData,
+      { headers }
+    ).then(response => {
+        alert(response.data);
+    }).catch(error => {
+        console.log(error)
+      });
+  }
+
     console.log(selectedfile)
     if (isLoading) {
         return <div className="App">Loading...</div>;
@@ -306,6 +332,7 @@ export default function Ejemplares() {
                             </Typography>
                             <br></br>
                             <Button
+                                onClick= {deleteAnimal}
                                 variant="outlined"
                                 color="error"
                                 style={{ marginTop: 5 }}
