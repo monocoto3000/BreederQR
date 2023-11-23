@@ -18,6 +18,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import config from "../../../config";
 import Cards from "../Moleculas/Cards";
+import Cookies from 'js-cookie'
 
 export default function Ejemplares() {
     const [age, setAge] = React.useState('');
@@ -25,7 +26,7 @@ export default function Ejemplares() {
         setAge(event.target.value);
     };
     const baseURL = "http://localhost:8080/animal/getAllAnimals"
-    const token = config.auth.token
+    const token = Cookies.get("token");
     console.log(token)
     const [ejemplares, setEjemplares] = useState(null);
     const [isLoading, setLoading] = useState(true);

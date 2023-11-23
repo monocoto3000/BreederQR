@@ -45,7 +45,7 @@ import FormLabel from '@mui/material/FormLabel';
 import Cookies from 'js-cookie';
 
 export default function Ejemplares() {
-    const token = config.auth.token
+    const token = Cookies.get("token");
     const idAnimal = Cookies.get("animalId")
     // const softDeleteAnimalURL = "http://localhost:8080/animal/deleteAnimal"
     // axios.delete(softDeleteAnimalURL, {
@@ -485,7 +485,7 @@ export default function Ejemplares() {
                         console.log(values)
                         await new Promise((r) => setTimeout(r, 500));
                         console.log("funciona o me mato")
-                        // const token = Cookies.get('token');
+                        const token = Cookies.get('token');
                         axios.post(baseURL,
                             {
                                 "title": values.title,
