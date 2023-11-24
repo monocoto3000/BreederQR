@@ -66,6 +66,7 @@ export default function page() {
           register_number: "",
         }}
         onSubmit={async (values) => {
+
           event.preventDefault();
           try {
             const token = Cookies.get("token");
@@ -141,6 +142,7 @@ export default function page() {
                         id="file"
                         onChange={handleChangeImg}
                       ></input>
+
                     </div>
 
                     <div>
@@ -198,7 +200,6 @@ export default function page() {
                         helperText={errors.valores}
                       ></TextField>
                     </div>
-
                    
 
                     <div>
@@ -217,4 +218,6 @@ export default function page() {
       </Formik>
     </>
   );
+
 }
+
