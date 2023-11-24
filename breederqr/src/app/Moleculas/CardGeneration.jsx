@@ -2,59 +2,44 @@
 import React from 'react';
 import Cards from './Cards';
 import { Grid } from '@mui/material';
-import config from '../../../config';
+import Cookies from 'js-cookie';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
-export default function CardGeneration(aux) {
-    console.log(aux)
-    const pacientes = [
-        {
-            nombre: "pablo",
-            edad: 12,
-            sexo: "H",
-            nacimiento: "12/42/2004",
-            img: "https://www.gstatic.com/webp/gallery3/1.sm.png",
-            descripcion: "qweqweqweqw qw,eq weq werqweqwer qwr  rt wrer   wre q r ewtre  weq w e r"
-        },
-        {
-            nombre: "pepe",
-            edad: 23,
-            sexo: "M",
-            nacimiento: "12/42/2004",
-            img: "https://placebear.com/g/200/200",
-            descripcion: "qweqweqweqw qw qweqqeqwewr qwe qweq wewqrewt wre q r ewtre  weq w e r"
-        },
-        {
-            nombre: "Rox",
-            edad: 9,
-            sexo: "H",
-            nacimiento: "12/42/2004",
-            img: "https://source.unsplash.com/user/c_v_r/1900×800",
-            descripcion: "qweqweqweqw rewt wre q r ewtre  weq w e r"
-        },
-        {
-            nombre: "Monica",
-            edad: 9,
-            sexo: "H",
-            nacimiento: "12/42/2004",
-            img: "https://source.unsplash.com/user/c_v_r/1900×800",
-            descripcion: "qweqweqweqw qw,eq weq werqt wre q r ewtre  weq w e r"
-        },
-        {
-            nombre: "Monica",
-            edad: 9,
-            sexo: "M",
-            nacimiento: "12/42/2004",
-            img: "https://source.unsplash.com/user/c_v_r/1900×800",
-            descripcion: "qweqweqweqw qw,eq weq werqewtre  weq w e r"
-        }
-    ]
+export default function CardGeneration() {
+    const baseURL = "http://localhost:8080/animal/getAllAnimals"
+    const token = Cookies.get("token");
+    console.log(token)
+    const [ejemplares, setEjemplares] = useState(null);
+    const [isLoading, setLoading] = useState(true);
+    useEffect(() => {
+        axios.get(baseURL, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            params: {
+                "from": 6,
+                "where": 0,
+                "token": token
+            }
+        }).then(response => {
+            setEjemplares(response.data);
+            setLoading(false);
+        })
+            .catch(error => {
+                console.log(error)
+            });
+    }, []);
+    if (isLoading) {
+        return <div className="App">Loading...</div>;
+    }
     return (
         <>
-            {pacientes.map((paciente, index) => {
+            {ejemplares.map((ejemplar, index) => {
                 return (
-                    <Grid item xs={12} lg={3}>
+                    <Grid item xs={12} lg={12}>
                         <div key={index}>
-                            <Cards aux={paciente} />
+                            <Cards aux={ejemplar} />
                         </div>
                     </Grid>
                 );

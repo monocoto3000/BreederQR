@@ -3,10 +3,8 @@ import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import { Card, Grid, Typography, CardContent, CardActionArea } from '@mui/material';
 import Chip from '@mui/material/Chip';
-import Icon from '../Atoms/Icon';
 import InsertInvitationRoundedIcon from '@mui/icons-material/InsertInvitationRounded';
 import PetsRoundedIcon from '@mui/icons-material/PetsRounded';
-import config from '../../../config';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
 

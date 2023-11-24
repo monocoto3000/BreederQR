@@ -27,6 +27,7 @@ import { OutlinedInput } from '@mui/material';
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from 'js-cookie';
+import config from "../../../config";
 
 const pages = [
   {
@@ -62,42 +63,11 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+
 function Nav() {
-  const baseURL = "http://localhost:8080/breeder/getBreeder"
-  const [criador, setCriador] = useState(null)
-  const [isLoading, setLoading] = useState(true);
-  const token = Cookies.get("token");
-  useEffect(() => {
-    axios.get(baseURL, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      params: {
-        "token": token
-      }
-    }).then(response => {
-      console.log(response.data); 
-      setCriador(response.data);
-      console.log(criador);
-      setLoading(false);
-      Cookies.set('breederID', response.data.id);
-    })
-      .catch(error => {
-        console.log(error)
-      });
-  }, []);
-  
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const [showPassword, setShowPassword] = React.useState(false);
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -110,7 +80,6 @@ function Nav() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
   return (
     <><AppBar position="static" style={{ background: "#65717d" }}>
       <Container maxWidth="xl">
@@ -191,19 +160,7 @@ function Nav() {
                     onClose={handleCloseUserMenu}
                   >
                     <MenuItem>
-                      <Typography textAlign="center" variant='caption'>Nombre: <strong>{perfil[0].nombre} {perfil[0].apellido_paterno} {perfil[0].apellido_materno}</strong></Typography>
-                    </MenuItem>
-                    <MenuItem>
-                      <Typography textAlign="center" variant='caption'>Nombre de usuario: <strong>{perfil[0].usuario}</strong></Typography>
-                    </MenuItem>
-                    <MenuItem>
-                      <Typography textAlign="center" variant='caption'>Correo: <strong>{perfil[0].correo}</strong></Typography>
-                    </MenuItem>
-                    <MenuItem onClick={handleOpen}>
-                      <Typography textAlign="center" variant='caption'><strong>Editar perfil</strong></Typography>
-                    </MenuItem>
-                    <MenuItem>
-                      <Typography textAlign="center" variant='caption' style={{ color: "#b71c1c" }}><strong>Cerrar sesion</strong></Typography>
+                      <Typography textAlign="center" variant='caption' style={{ color: "#b71c1c" }} onClick={() => config.auth.token = ""}><strong>Cerrar sesion</strong></Typography>
                     </MenuItem>
                   </Menu>
                 </Box>
@@ -212,92 +169,8 @@ function Nav() {
           </Grid>
         </Toolbar>
       </Container>
-    </AppBar><Modal
-      aria-labelledby="transition-modal-title"
-      aria-describedby="transition-modal-description"
-      open={open}
-      onClose={handleClose}
-      closeAfterTransition
-      slots={{ backdrop: Backdrop }}
-      slotProps={{
-        backdrop: {
-          timeout: 500,
-        },
-      }}
-    >
-        <Fade in={open}>
-          <Box sx={style}>
-            <Grid container spacing={2}>
-              <Grid item lg={12} xs={12}>
-                <Typography variant="h6" component="h2">
-                  Editar perfil
-                </Typography>
-              </Grid>
-              <Grid item xs={12} lg={4}>
-                <InputLabel style={{ fontSize: 12 }}>
-                  Nombre
-                </InputLabel>
-                <TextField
-                  defaultValue={perfil[0].nombre}
-                  fullWidth />
-              </Grid>
-              <Grid item xs={12} lg={4}>
-                <InputLabel style={{ fontSize: 12 }}>
-                  Apellido paterno
-                </InputLabel>
-                <TextField
-                  defaultValue={perfil[0].apellido_paterno}
-                  fullWidth />
-              </Grid>
-              <Grid item xs={12} lg={4}>
-                <InputLabel style={{ fontSize: 12 }}>
-                  Apellido materno
-                </InputLabel>
-                <TextField
-                  defaultValue={perfil[0].apellido_materno}
-                  fullWidth />
-              </Grid>
-              <Grid item xs={12} lg={4}>
-                <InputLabel style={{ fontSize: 12 }}>
-                  Usuario
-                </InputLabel>
-                <TextField
-                  defaultValue={perfil[0].usuario}
-                  fullWidth />
-              </Grid>
-              <Grid item xs={12} lg={4}>
-                <InputLabel style={{ fontSize: 12 }}>
-                  Correo
-                </InputLabel>
-                <TextField
-                  defaultValue={perfil[0].correo}
-                  fullWidth />
-              </Grid>
-              <Grid item xs={12} lg={4}>
-                <InputLabel style={{ fontSize: 12 }}>
-                  Contraseña
-                </InputLabel>
-                <OutlinedInput
-                  type={showPassword ? 'text' : 'password'}
-                  defaultValue={perfil[0].contrasenia}
-                  fullWidth
-                  endAdornment={<InputAdornment position="end">
-                    <IconButton
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>} />
-              </Grid>
-              <Grid item xs={12} lg={12}>
-                <Button fullWidth variant='outlined' onClick={handleClose}>Guardar</Button>
-              </Grid>
-            </Grid>
-          </Box>
-        </Fade>
-      </Modal></>
+    </AppBar>
+    </>
   );
 }
 export default Nav;
