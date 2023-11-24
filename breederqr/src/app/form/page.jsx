@@ -14,9 +14,8 @@ import {
   RadioGroup,
   FormControlLabel,
   Autocomplete,
+  Modal,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import Stack from "@mui/material/Stack";
 import MainCard from "../Components/ui-component/cards/MainCard";
 import "../../css/form.css";
 import { useEffect } from "react";
@@ -24,7 +23,8 @@ import { useState } from "react";
 import axios from "axios";
 import { Formik } from "formik";
 import { values } from "lodash";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
+
 
 export default function form() {
   const ColorButton = styled(Button)(({ theme }) => ({
@@ -36,9 +36,13 @@ export default function form() {
     },
   }));
 
-  const specie = ["1", 'Caballo', 'Vaca'];
-  const gender = ['M', 'H', 'Indefinido'];
+  
+ 
 
+  const specie = ["1"];
+  const gender = ["M", "H", "N"];
+
+ 
   const [sexo, setSexo] = React.useState("");
   const handleChange = (event) => {
     setAge(event.target.value);
@@ -47,7 +51,7 @@ export default function form() {
     <>
       <Formik
         initialValues={{
-          specie: 0,
+          specie: "",
           birthday: "",
           breedingPlace: "",
           gender: "",
@@ -63,30 +67,34 @@ export default function form() {
 
             axios
               .post("http://localhost:8080/animal/postAnimal", {
-                specie: values.specie,
+                specie: 1,
                 birthday: values.birthday,
-                breedingPlace: breedingPlace,
+                breedingPlace: 1,
                 gender: values.gender,
                 name: values.name,
                 registerNumber: values.registerNumber,
                 description: values.description,
-                token: token
+                token: token,
               })
               .then((response) => {
                 console.log(response);
                 alert("creado");
+                window.location.href = "http://localhost:3000/Ejemplares";
               });
           } catch (error) {
             console.error(error);
-            if (scriptedRef.current) {
-              setStatus({ success: false });
-              setErrors({ submit: err.message });
-              setSubmitting(false);
-            }
+            alert("Agrega una imagen");
           }
         }}
       >
-        {({ errors, handleBlur, handleChange, handleSubmit, values, setFieldValue }) => (
+        {({
+          errors,
+          handleBlur,
+          handleChange,
+          handleSubmit,
+          values,
+          setFieldValue,
+        }) => (
           <form onSubmit={handleSubmit} style={{ margin: 20 }}>
             <MainCard title="Ejemplares">
               <Grid
@@ -155,6 +163,8 @@ export default function form() {
                         </div>
                       </Grid>
 
+                   
+
                       <Grid item xs={12} lg={6}>
                         <div style={{ margin: 10 }}>
                           <Box sx={{ minWidth: 120 }}>
@@ -219,7 +229,6 @@ export default function form() {
                               onChange={handleChange}
                               error={Boolean(errors.valores)}
                               helperText={errors.valores}
-                              
                               style={{
                                 borderRadius: "5px",
                                 backgroundColor: "#F7F7F9",
@@ -243,7 +252,7 @@ export default function form() {
                       <Grid item xs={12} lg={6}>
                         <div style={{ margin: 10 }}>
                           <Box sx={{ minWidth: 120 }}>
-                          <Autocomplete
+                            <Autocomplete
                               disablePortal
                               id="gender"
                               options={gender}
@@ -313,6 +322,9 @@ export default function form() {
                           </Box>
                         </div>
                       </Grid>
+
+                      <Grid item xs={12} lg={12}></Grid>
+   
                       <Grid
                         item
                         xs={12}
@@ -325,7 +337,9 @@ export default function form() {
                         }}
                       >
                         <Stack spacing={2} direction="row">
-                          <ColorButton type="submit" variant="contained">AGREGAR</ColorButton>
+                          <ColorButton type="submit" variant="contained">
+                            AGREGAR
+                          </ColorButton>
                         </Stack>
                       </Grid>
 

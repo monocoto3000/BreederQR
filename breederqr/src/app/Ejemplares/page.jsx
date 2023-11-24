@@ -1,62 +1,96 @@
-"use client"
+"use client";
 import React from "react";
 import MainCard from "../Components/ui-component/cards/MainCard";
-import { Grid } from '@mui/material';
+import { Grid } from "@mui/material";
 import CardGeneration from "../Moleculas/CardGeneration";
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import config from "../../../config";
 import Cards from "../Moleculas/Cards";
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
+import { styled } from "@mui/material/styles";
+import Stack from "@mui/material/Stack";
 
 export default function Ejemplares() {
-    const [age, setAge] = React.useState('');
-    const handleChange = (event) => {
-        setAge(event.target.value);
-    };
-    const baseURL = "http://localhost:8080/animal/getAllAnimals"
-    const token = Cookies.get("token");
-    console.log(token)
-    const [ejemplares, setEjemplares] = useState(null);
-    const [isLoading, setLoading] = useState(true);
-    useEffect(() => {
-        axios.get(baseURL, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            params: {
-                "from": 6,
-                "where": 0,
-                "token": token
-            }
-        }).then(response => {
-            setEjemplares(response.data);
-            setLoading(false);
-        })
-            .catch(error => {
-                console.log(error)
-            });
-    }, []);
-    if (isLoading) {
-        return <div className="App">Loading...</div>;
-    }
+  const ColorButton = styled(Button)(({ theme }) => ({
+    color: "black",
+    backgroundColor: "#F7F7F9",
+    opacity: "75%",
+    "&:hover": {
+      backgroundColor: "#65717d",
+    },
+  }));
+  const [age, setAge] = React.useState("");
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
+  const baseURL = "http://localhost:8080/animal/getAllAnimals";
+  const token = Cookies.get("token");
+  console.log(token);
+  const [ejemplares, setEjemplares] = useState(null);
+  const [isLoading, setLoading] = useState(true);
+  useEffect(() => {
+    axios
+      .get(baseURL, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          from: 6,
+          where: 0,
+          token: token,
+        },
+      })
+      .then((response) => {
+        setEjemplares(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+  if (isLoading) {
     return (
-        <>
-            <div style={{ margin: 20 }}>
-                <MainCard title="Ejemplares">
-                    <Grid container direction="row" spacing={2}>
-                        {/* <Grid item xs={12} lg={4}>
+      <div
+        className="App"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <h1>¿No tienes un Criadero?</h1>
+        <Stack spacing={2} direction="row">
+          <ColorButton
+            variant="contained"
+            onClick={() => {
+              window.location.href = "http://localhost:3000/Criadero";
+            }}
+          >
+            AGREGAR
+          </ColorButton>
+        </Stack>
+      </div>
+    );
+  }
+  return (
+    <>
+      <div style={{ margin: 20 }}>
+        <MainCard title="Ejemplares">
+          <Grid container direction="row" spacing={2}>
+            {/* <Grid item xs={12} lg={4}>
                             <TextField id="outlined-basic" label="Buscar" variant="outlined" fullWidth />
                         </Grid>
                         <Grid item xs={12} lg={4}>
@@ -94,19 +128,19 @@ export default function Ejemplares() {
                         <Grid item xs={12} lg={1}>
                             <Button variant="contained" size="large" style={{ backgroundColor: "#564E58" }} fullWidth>Aplicar</Button>
                         </Grid> */}
-                        {ejemplares.map((ejemplar, index) => {
-                            console.log(ejemplar)
-                            return (
-                                <Grid item xs={12} lg={3}>
-                                    <div key={index}>
-                                        <Cards aux={ejemplar}/>
-                                    </div>
-                                </Grid>
-                            );
-                        })}
-                    </Grid>
-                </MainCard>
-            </div >
-        </>
-    )
+            {ejemplares.map((ejemplar, index) => {
+              console.log(ejemplar);
+              return (
+                <Grid item xs={12} lg={3}>
+                  <div key={index}>
+                    <Cards aux={ejemplar} />
+                  </div>
+                </Grid>
+              );
+            })}
+          </Grid>
+        </MainCard>
+      </div>
+    </>
+  );
 }
