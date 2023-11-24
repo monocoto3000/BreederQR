@@ -755,13 +755,23 @@ export default function Ejemplares() {
                         token: '',
                     }}
                     onSubmit={async (values) => {
-                        axios.post(postPhotoURL,
-                            {
-                                "idAnimal": values.specie,
-                                "photo": selectedfile,
-                                "token": token
-                            }
-                        )
+                        try {
+                            axios.post(postPhotoURL, {
+                                idAnimal: values.specie,
+                                photo: selectedfile,
+                                token: token
+                            })
+                              .then((response) => {
+                                if (response.data != "") {
+                                  window.alert("Creado exitosamente")
+                                } else {
+                                window.alert("Error al subir el archivo")
+                                  console.log("Usuario o Contraseña incorrecta")
+                                }
+                              });
+                          } catch (error) {
+                            console.error(err);
+                          }
                     }}
                 >
                     {({ errors, handleBlur, handleChange, handleSubmit, values, setFieldValue }) => (
