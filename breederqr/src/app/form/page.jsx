@@ -66,7 +66,7 @@ export default function form() {
             const breedingPlace = Cookies.get("breedingPlace");
 
             axios
-              .post("http://localhost:8080/animal/postAnimal", {
+              .post("http://localhost:º8080/animal/postAnimal", {
                 specie: 1,
                 birthday: values.birthday,
                 breedingPlace: 1,
@@ -80,6 +80,7 @@ export default function form() {
                 console.log(response);
                 alert("creado");
                 window.location.href = "http://localhost:3000/Ejemplares";
+
               });
           } catch (error) {
             console.error(error);

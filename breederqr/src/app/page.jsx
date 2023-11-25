@@ -35,6 +35,8 @@ export default function Home() {
   const [breeder, setBreeder] = useState(null);
   const [criadero, setCriaderos] = useState(null);
   const [isLoading, setLoading] = useState(true);
+  const [amount, setAmount] = useState();
+
   useEffect(() => {
     axios
       .get(baseURL, {
@@ -51,6 +53,20 @@ export default function Home() {
         console.log(response.data);
         setLoading(false);
         Cookies.set("breedingPlace", response.data.id);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+      axios
+      .get("http://localhost:8080//laying/getAmount", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      })
+      .then((response) => {
+        setAmount(response.data);
+        console.log(amount)
       })
       .catch((error) => {
         console.log(error);

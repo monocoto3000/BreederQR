@@ -88,7 +88,7 @@ export default function Ejemplares() {
       .catch((error) => {
         console.log(error);
       });
-      axios
+    axios
       .get(getAnimalUrl, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -107,7 +107,7 @@ export default function Ejemplares() {
   }, []);
 
   useEffect(() => {
-      axios
+    axios
       .get(getAnimalUrl, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -155,8 +155,8 @@ export default function Ejemplares() {
     return (
       <Document>
         <Page wrap style={styles.body}>
-          <Text style={styles.title}>{animal.register_number}</Text>
-          <Image style={styles.image} src={animal.qr} />
+          <Text style={styles.title}>{animal?.register_number}</Text>
+          <Image style={styles.image} src={animal?.qr} />
         </Page>
       </Document>
     );
@@ -212,7 +212,7 @@ export default function Ejemplares() {
       parentesco: "Hermano",
     },
   ];
-  
+
   const imagenes = [
     { img: "https://via.placeholder.com/300.png/09f/fff" },
     { img: "https://via.placeholder.com/300.png/09f/fff" },
@@ -373,7 +373,7 @@ export default function Ejemplares() {
             >
               <Typography variant="caption" fontSize={18}>
                 <AlertTitle>
-                  <strong>¿Desea eliminar al ejemplar {animal.name}?</strong>
+                  <strong>¿Desea eliminar al ejemplar {animal?.name}?</strong>
                 </AlertTitle>
               </Typography>
               <Typography variant="caption" fontSize={15}>
@@ -397,7 +397,7 @@ export default function Ejemplares() {
             <MainCard
               title={
                 <>
-                  {animal.name}
+                  {animal?.name}
                   <Button
                     variant="outlined"
                     color="error"
@@ -425,7 +425,7 @@ export default function Ejemplares() {
                   <div style={{ textAlign: "center" }}>
                     <img
                       style={{ borderRadius: "100%", width: 180, height: 180 }}
-                      src={animal.birthday}
+                      src={animal?.qr}
                       alt="new"
                     />
                   </div>
@@ -434,23 +434,23 @@ export default function Ejemplares() {
                   <Chip
                     label={
                       <Typography variant="subtitle1">
-                        <b>{animal.birthday}</b>
+                        <b>{animal?.birthday}</b>
                       </Typography>
                     }
                     variant="outlined"
                     style={{ float: "right" }}
                   />
                   <Typography variant="h5" gutterBottom>
-                    <b>Sexo:</b> {animal.gender}
+                    <b>Sexo:</b> {animal?.gender}
                   </Typography>
                   <Typography variant="h5" gutterBottom>
-                    <b>Número de Registro:</b> {animal.register_number}
+                    <b>Número de Registro:</b> {animal?.register_number}
                   </Typography>
                   <Typography variant="h5" gutterBottom>
-                    <b>Especie:</b> {animal.specie.name}
+                    <b>Especie:</b> {animal?.specie.name}
                   </Typography>
                   <Typography variant="subtitle1" gutterBottom>
-                    <b>Fecha de registro:</b> {animal.createdAt}
+                    <b>Fecha de registro:</b> {animal?.createdAt}
                   </Typography>
                 </Grid>
               </Grid>
@@ -514,11 +514,11 @@ export default function Ejemplares() {
                   Descripción
                 </Typography>
                 <Typography variant="subtitle1" gutterBottom>
-                  {animal.description}
+                  {animal?.description}
                 </Typography>
                 <PDFDownloadLink
                   document={<QR />}
-                  fileName={animal.name + "_qr"}
+                  fileName={animal?.name + "_qr"}
                 >
                   {({ loading }) =>
                     loading ? (
@@ -550,7 +550,7 @@ export default function Ejemplares() {
                 </>
               }
             >
-              {puestas.map((puesta) => (
+              {puestas?.map((puesta) => (
                 <Accordion
                   expanded={expanded === puesta.id}
                   onChange={handleAcordion(puesta.id)}
@@ -605,7 +605,7 @@ export default function Ejemplares() {
                 onSubmit={async (values) => {
                   event.preventDefault();
                   var posdata = new FormData();
-                  posdata.append("idAnimal", animal.id);
+                  posdata.append("idAnimal", animal?.id);
                   posdata.append("photo", image1);
                   posdata.append("token", token);
                   for (let entry of posdata.entries()) {
@@ -667,7 +667,7 @@ export default function Ejemplares() {
             initialValues={{
               amount: 0,
               deads: 0,
-              idAnimal: animal.id,
+              idAnimal: animal?.id,
               token: token
             }}
             onSubmit={async (values) => {
@@ -676,7 +676,7 @@ export default function Ejemplares() {
                   .post("http://localhost:8080/laying/postLaying", {
                     amount: values.amount,
                     deads: values.deads,
-                    idAnimal: animal.id,
+                    idAnimal: animal?.id,
                     token: token
                   })
                 console.log(values)
@@ -762,29 +762,43 @@ export default function Ejemplares() {
         >
           <Formik
             initialValues={{
-              specie: animal.specie.id,
-              birthday: animal.birthday,
-              breedingPlace: animal.breedingPlace.id,
-              gender: animal.gender,
-              name: animal.name,
-              description: animal.description,
-              registerNumber: animal.registerNumber,
+              specie: animal?.specie.id,
+              birthday: animal?.birthday,
+              breedingPlace: animal?.breedingPlace.id,
+              gender: animal?.gender,
+              name: animal?.name,
+              description: animal?.description,
+              registerNumber: animal?.registerNumber,
               token: token,
             }}
             onSubmit={async (values) => {
               console.log(values)
+              const headers = {
+                authorization: `Bearer ${token}`,
+                "Content-type": "multipart/form-data",
+              };
+
+              var formData = new FormData();
+             
+              formData.append("specie", 1);
+              formData.append("breedingPlace", 1);
+              formData.append("birthday", values.birthday);
+              formData.append("gender", values.gender);
+              formData.append("name", values.name);
+              formData.append("description", values.description);
+              formData.append("registerNumber", values.registerNumber);
+              formData.append("token", token);
+              formData.append("id", idAnimal);
+
+              for (let entry of formData.entries()) {
+                console.log(entry[0], entry[1]);
+              }
+
               try {
                 axios
-                  .post("http://localhost:8080/animal/putAnimal", {
-                    specie:  animal.specie.id,
-                    breedingPlace: animal.breedingPlace.id,
-                    birthday: values.birthday,
-                    gender: values.gender,
-                    name: values.name,
-                    description: values.description,
-                    registerNumber: values.registerNumber,
-                    token: token,
-                  })
+                  .post("http://localhost:8080/animal/putAnimal",
+                     formData
+                  )
                   .then(Response);
               } catch (error) {
                 console.log("Hubo un error al actualizar al ejemplar");
@@ -806,7 +820,7 @@ export default function Ejemplares() {
                     <Grid container spacing={2}>
                       <Grid item lg={12} xs={12}>
                         <Typography variant="h6" component="h2">
-                          Editar a <strong>{animal.name}</strong>
+                          Editar a <strong>{animal?.name}</strong>
                         </Typography>
                       </Grid>
                       <Grid item xs={12} lg={6}>
@@ -929,7 +943,7 @@ export default function Ejemplares() {
             )}
           </Formik>
         </Modal>
-      </div>
+      </div >
     </>
   );
 }
