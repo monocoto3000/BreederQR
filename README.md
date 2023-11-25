@@ -11,8 +11,8 @@ Primero se debe de ingresar a localhost:3000/Login
 
 Para logearse utilice las siguientes credenciales:
 
-> mail: user@gmail.com
-> password: 12345678
+- mail: user@gmail.com
+- password: 12345678
 
 Posteriormente sera redirigido a la pagina principal (Dashboard)
 
