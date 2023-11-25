@@ -4,8 +4,8 @@ Creada con NextJS
 
 Una vez clonado el repositorio se ejecutan los siguientes comandos:
 
-`npm i` (instalar dependencias)
-`npm run dev` (compilar el proyecto)
+- `npm i` (instalar dependencias)
+- `npm run dev` (compilar el proyecto)
 
 Primero se debe de ingresar a localhost:3000/Login
 
