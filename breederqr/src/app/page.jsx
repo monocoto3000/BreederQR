@@ -36,6 +36,8 @@ export default function Home() {
   const [criadero, setCriaderos] = useState(null);
   const [isLoading, setLoading] = useState(true);
   const [amount, setAmount] = useState();
+  const [deads, setDeads] = useState();
+
 
   useEffect(() => {
     axios
@@ -59,7 +61,7 @@ export default function Home() {
       });
 
       axios
-      .get("http://localhost:8080//laying/getAmount", {
+      .get("http://localhost:8080/laying/getAmount", {
         headers: {
           Authorization: `Bearer ${token}`,
         }
@@ -67,6 +69,20 @@ export default function Home() {
       .then((response) => {
         setAmount(response.data);
         console.log(amount)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+      axios
+      .get("http://localhost:8080/laying/getDeads", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      })
+      .then((response) => {
+        setDeads(response.data);
+        console.log(deads)
       })
       .catch((error) => {
         console.log(error);
@@ -260,8 +276,8 @@ export default function Home() {
             title="Taza de nacimiento"
             chart={{
               series: [
-                { label: "Vivos", value: 4344 },
-                { label: "Muertos", value: 5435 },
+                { label: "Vivos", value: Number(amount-deads) },
+                { label: "Muertos", value: Number(deads) },
               ],
             }}
           />

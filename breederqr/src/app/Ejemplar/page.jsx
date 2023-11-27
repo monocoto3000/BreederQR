@@ -161,11 +161,14 @@ export default function Ejemplares() {
       </Document>
     );
   };
-  const imagesURL = "http://localhost:8080/photo/getPhoto?idBreedingPace=1";
+  const imagesURL = "http://localhost:8080/photo/getPhoto";
   const [imgage, setImage] = useState(null);
   useEffect(() => {
     axios
       .get(imagesURL, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         params: {
           idBreedingPace: idAnimal,
           where: 0,
@@ -590,7 +593,7 @@ export default function Ejemplares() {
                   <Grid item xs md lg={2}>
                     <img
                       style={{ borderRadius: 10, width: 100, height: 100 }}
-                      src={imagen.url}
+                      src={imagen.photo}
                       alt="new"
                     />
                   </Grid>
