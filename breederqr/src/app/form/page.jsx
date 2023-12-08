@@ -41,7 +41,7 @@ export default function form() {
   
  
 
-  const specie = ["1"];
+  const specie = ["Gecko Leopardo"];
   const gender = ["M", "H", "N"];
 
  
@@ -68,7 +68,7 @@ export default function form() {
             const breedingPlace = Cookies.get("breedingPlace");
 
             axios
-              .post("http://localhost:º8080/animal/postAnimal", {
+              .post("http://localhost:8080/animal/postAnimal", {
                 specie: 1,
                 birthday: values.birthday,
                 breedingPlace: 1,

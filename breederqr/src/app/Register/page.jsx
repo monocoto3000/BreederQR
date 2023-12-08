@@ -59,6 +59,7 @@ export default function Page() {
               second_last_name: values.second_last_name,
             }).then((response) => {
               if (response.data != "") {
+                alert("Usuario creado exitosamente");
                 window.location.href = "http://localhost:3000/Login";
               } else {
                 console.log("El Usuario fue creado :)");

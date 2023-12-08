@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import Grid from "@mui/material/Grid";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 import MortalityRate from "./Moleculas/MortalityRate";
 import SalesRate from "./Moleculas/SalesRate";
 import MainCard from "./Components/ui-component/cards/MainCard";
@@ -27,6 +27,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Formik } from "formik";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
+import AddIcon from "@mui/icons-material/Add";
 
 const baseURL = "http://localhost:8080/breedingPlace/getBreedingPlace";
 const baseURL2 = "http://localhost:8080/breedingPlace/deleteBreedingPlace";
@@ -60,7 +61,7 @@ export default function Home() {
         console.log(error);
       });
 
-      axios
+    axios
       .get("http://localhost:8080/laying/getAmount", {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -74,7 +75,7 @@ export default function Home() {
         console.log(error);
       });
 
-      axios
+    axios
       .get("http://localhost:8080/laying/getDeads", {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -138,7 +139,22 @@ export default function Home() {
     event.preventDefault();
   };
   if (isLoading) {
-    return <div className="App">Loading...</div>;
+    return (
+      <div>
+        <div className="App">Loading...</div>
+        <h1>¿No tienes un Criadero?</h1>
+        <Stack spacing={2} direction="row">
+          <Button
+            variant="outlined"
+            style={{ float: "right", marginRight: 10 }}
+            startIcon={<AddIcon />}
+            onClick={() => window.location.href = "http://localhost:3000/CrearCriadero"}
+          >
+            Agregar Criadero
+          </Button>
+        </Stack>
+      </div>
+    )
   }
   return (
     <div style={{ margin: 15 }}>
@@ -276,7 +292,7 @@ export default function Home() {
             title="Taza de nacimiento"
             chart={{
               series: [
-                { label: "Vivos", value: Number(amount-deads) },
+                { label: "Vivos", value: Number(amount - deads) },
                 { label: "Muertos", value: Number(deads) },
               ],
             }}
@@ -472,16 +488,24 @@ export default function Home() {
               console.log(values);
               const token = Cookies.get("token");
               console.log(token);
+
+              const Headers = {
+                Authorization: `Bearer ${token}`,
+                "Content-type": "",
+              };
+
               axios
-                .post("http://localhost:8080/breeder/putBreeder", {
-                  last_name: values.last_name,
-                  mail: values.mail,
-                  name: values.name,
-                  password: values.password,
-                  second_last_name: values.second_last_name,
-                  username: values.username,
-                  token: token,
-                })
+                .post("http://localhost:8080/breeder/putBreeder",
+                  {Headers},
+                  {
+                    last_name: values.last_name,
+                    mail: values.mail,
+                    name: values.name,
+                    password: values.password,
+                    second_last_name: values.second_last_name,
+                    username: values.username,
+                    token: token,
+                  })
                 .then((response) => {
                   console.log(response);
                   alert("actualizado");
